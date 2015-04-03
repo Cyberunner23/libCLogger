@@ -1,5 +1,5 @@
 /*
-Copyright 2014 Alex Frappier Lachapelle
+Copyright 2015 Alex Frappier Lachapelle
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -14,3 +14,19 @@ Copyright 2014 Alex Frappier Lachapelle
    limitations under the License.
 */
 
+#ifndef LIBCLOGGER_CLOGGERMESSAGE_HPP
+#define LIBCLOGGER_CLOGGERMESSAGE_HPP
+
+#include <ctime>
+#include <string>
+
+struct CLoggerMessage{
+    std::string       logMessage;
+    unsigned long int fileNumber;
+    std::string       fileName;
+    std::time_t       timeAtLog;
+    std::string       logLevel;
+    std::string       threadName;
+};
+
+#endif //LIBCLOGGER_CLOGGERMESSAGE_HPP

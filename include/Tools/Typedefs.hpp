@@ -1,5 +1,5 @@
 /*
-Copyright 2014 Alex Frappier Lachapelle
+Copyright 2015 Alex Frappier Lachapelle
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -14,3 +14,10 @@ Copyright 2014 Alex Frappier Lachapelle
    limitations under the License.
 */
 
+#include <stdint.h>
+
+typedef uint8_t  	   uint8;
+typedef uint16_t 	   uint16;
+typedef uint32_t 	   uint32;
+typedef uint_least64_t uint64;
+typedef unsigned char  uchar;

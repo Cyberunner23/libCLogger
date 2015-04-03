@@ -1,5 +1,5 @@
 /*
-Copyright 2014 Alex Frappier Lachapelle
+Copyright 2015 Alex Frappier Lachapelle
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -14,3 +14,22 @@ Copyright 2014 Alex Frappier Lachapelle
    limitations under the License.
 */
 
+#ifndef LIBCLOGGER_CLOGGERVER_HPP
+#define LIBCLOGGER_CLOGGERVER_HPP
+
+#include "Typedefs.hpp"
+
+class CLoggerVer{
+
+public:
+
+    //Vars
+    struct CLoggerLibVerStruct{
+        uint8 major = 0;
+        uint8 minor = 1;
+        uint8 patch = 0;
+    };
+
+};
+
+#endif //LIBCLOGGER_CLOGGERVER_HPP

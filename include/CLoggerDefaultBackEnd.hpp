@@ -1,5 +1,5 @@
 /*
-Copyright 2014 Alex Frappier Lachapelle
+Copyright 2015 Alex Frappier Lachapelle
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -14,3 +14,29 @@ Copyright 2014 Alex Frappier Lachapelle
    limitations under the License.
 */
 
+#ifndef LIBCLOGGER_CLOGGERDEFAULTBACKEND_H
+#define LIBCLOGGER_CLOGGERDEFAULTBACKEND_H
+
+
+class CLoggerDefaultBackEnd{
+
+public:
+
+    //Vars
+
+    //Funcs
+
+    CLoggerDefaultBackEnd();
+
+    ~CLoggerDefaultBackEnd();
+
+
+private:
+
+    //Vars
+
+    //Funcs
+
+};
+
+#endif //LIBCLOGGER_CLOGGERDEFAULTBACKEND_H
