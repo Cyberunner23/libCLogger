@@ -19,7 +19,7 @@ PROJECT(libCLogger CXX)
 #----------------------------------------------------------
 ####################### OPTIONS ###########################
 #----------------------------------------------------------
-OPTION(LIBCLOGGER_BUILD_SHARED_LIBRARIES "Build libCLogger as a shared lib (setting this to OFF will compile statically)" ON)
+OPTION(LIBCLOGGER_BUILD_SHARED_LIBRARIES "Build libCLogger as a shared Lib (setting this to OFF will compile statically)" ON)
 
 
 #----------------------------------------------------------
@@ -32,25 +32,25 @@ SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 #################### SOURCE / HEADERS #####################
 #----------------------------------------------------------
 SET(CLOGGER_SRC_FILES
-    src/CLogger.cpp
-    src/CloggerBackendBase.cpp
-    src/CLoggerCore.cpp
-    src/CLoggerDefaultBackEnd.cpp
+    Src/CLogger.cpp
+    Src/CloggerBackendBase.cpp
+    Src/CLoggerCore.cpp
+    Src/CLoggerDefaultBackEnd.cpp
 )
 
 SET(CLOGGER_HDR_FILES
-    include/CLogger.hpp
-    include/CloggerBackendBase.hpp
-    include/CLoggerCore.hpp
-    include/CLoggerDefaultBackEnd.hpp
-    include/CLoggerDefaultFrontEnd.hpp
-    include/CLoggerMessage.hpp
-    include/CLoggerVer.hpp
-    include/Tools/ConcurrentQueue.h
-    include/Tools/Typedefs.hpp
+    Include/CLogger.hpp
+    Include/CloggerBackendBase.hpp
+    Include/CLoggerCore.hpp
+    Include/CLoggerDefaultBackEnd.hpp
+    Include/CLoggerDefaultFrontEnd.hpp
+    Include/CLoggerMessage.hpp
+    Include/CLoggerVer.hpp
+    Include/Tools/ConcurrentQueue.h
+    Include/Tools/Typedefs.hpp
 )
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/include)
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/include/Tools)
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/Include)
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/Include/Tools)
 
 
 #----------------------------------------------------------
@@ -64,8 +64,8 @@ ELSE(LIBCLOGGER_BUILD_SHARED_LIBRARIES)
 ENDIF(LIBCLOGGER_BUILD_SHARED_LIBRARIES)
 
 SET_TARGET_PROPERTIES(libCLogger PROPERTIES
-    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib
-    ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib
+    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/Lib
+    ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/Lib
     OUTPUT_NAME "CLogger"
 )
 
