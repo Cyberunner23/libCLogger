@@ -20,12 +20,13 @@ Copyright 2015 Alex Frappier Lachapelle
 #include <ctime>
 #include <string>
 
-struct CLoggerMessage{
+struct CLoggerMessageStruct{
     std::string       logMessage;
     unsigned long int fileNumber;
     std::string       fileName;
     std::time_t       timeAtLog;
     std::string       logLevel;
+    bool              isLogFatal;
     std::string       threadName;
 };
 
