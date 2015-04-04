@@ -17,7 +17,10 @@ Copyright 2015 Alex Frappier Lachapelle
 #ifndef LIBCLOGGER_CLOGGERDEFAULTBACKEND_H
 #define LIBCLOGGER_CLOGGERDEFAULTBACKEND_H
 
+#include <fstream>
+
 #include "CloggerBackendBase.hpp"
+#include "Typedefs.hpp"
 
 class CLoggerDefaultBackEnd : public CloggerBackendBase{
 
@@ -30,7 +33,7 @@ public:
     CLoggerDefaultBackEnd();
     ~CLoggerDefaultBackEnd();
 
-    virtual void onInit();
+    virtual bool onInit();
     virtual void onExit();
 
     virtual void writeMessageToBackend(CLoggerMessageStruct message);
@@ -39,8 +42,16 @@ public:
 private:
 
     //Vars
+    std::ofstream outStream;
+    std::string   logFilePath;
 
     //Funcs
+
+    std::string getDate();
+    std::string getTime(time_t time);
+
+    bool doesFileExist(std::string logFile);
+    bool isFileEmpty(std::string logFile);
 
 };
 

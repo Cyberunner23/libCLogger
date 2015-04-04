@@ -23,7 +23,6 @@ Copyright 2015 Alex Frappier Lachapelle
 #include "ConcurrentQueue.h"
 
 #include "CloggerBackendBase.hpp"
-#include "CLogger.hpp"
 #include "CLoggerDefaultBackEnd.hpp"
 #include "CLoggerMessage.hpp"
 

@@ -22,7 +22,7 @@ Copyright 2015 Alex Frappier Lachapelle
 
 struct CLoggerMessageStruct{
     std::string       logMessage;
-    unsigned long int fileNumber;
+    unsigned long int fileLineNumber;
     std::string       fileName;
     std::time_t       timeAtLog;
     std::string       logLevel;

@@ -30,7 +30,7 @@ public:
     CloggerBackendBase();
     ~CloggerBackendBase();
 
-    virtual void onInit() = 0;
+    virtual bool onInit() = 0;
     virtual void onExit() = 0;
 
     virtual void writeMessageToBackend(CLoggerMessageStruct message) = 0;
