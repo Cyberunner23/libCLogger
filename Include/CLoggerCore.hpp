@@ -26,6 +26,7 @@ Copyright 2015 Alex Frappier Lachapelle
 #include "CLoggerDefaultBackEnd.hpp"
 #include "CLoggerMessage.hpp"
 
+
 using namespace moodycamel;
 
 class CLoggerCore{
@@ -65,5 +66,8 @@ private:
 
 
 };
+
+extern CLoggerCore cloggerCoreInstance;
+
 
 #endif //LIBCLOGGER_CLOGGERCORE_H

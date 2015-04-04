@@ -48,6 +48,7 @@ SET(CLOGGER_HDR_FILES
     Include/CLoggerVer.hpp
     Include/Tools/ConcurrentQueue.h
     Include/Tools/Typedefs.hpp
+
 )
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/Include)
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/Include/Tools)
