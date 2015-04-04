@@ -17,8 +17,9 @@ Copyright 2015 Alex Frappier Lachapelle
 #ifndef LIBCLOGGER_CLOGGERDEFAULTBACKEND_H
 #define LIBCLOGGER_CLOGGERDEFAULTBACKEND_H
 
+#include "CloggerBackendBase.hpp"
 
-class CLoggerDefaultBackEnd{
+class CLoggerDefaultBackEnd : public CloggerBackendBase{
 
 public:
 
@@ -27,8 +28,12 @@ public:
     //Funcs
 
     CLoggerDefaultBackEnd();
-
     ~CLoggerDefaultBackEnd();
+
+    virtual void onInit();
+    virtual void onExit();
+
+    virtual void writeMessageToBackend(CLoggerMessageStruct message);
 
 
 private:

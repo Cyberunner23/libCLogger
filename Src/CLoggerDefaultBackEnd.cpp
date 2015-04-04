@@ -23,3 +23,17 @@ CLoggerDefaultBackEnd::CLoggerDefaultBackEnd(){
 CLoggerDefaultBackEnd::~CLoggerDefaultBackEnd(){
 
 }
+
+
+void CLoggerDefaultBackEnd::onInit(){
+
+}
+
+void CLoggerDefaultBackEnd::onExit(){
+
+}
+
+
+void CLoggerDefaultBackEnd::writeMessageToBackend(CLoggerMessageStruct message){
+
+}

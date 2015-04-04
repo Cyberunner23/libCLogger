@@ -17,7 +17,15 @@ Copyright 2015 Alex Frappier Lachapelle
 #ifndef LIBCLOGGER_CLOGGERCORE_H
 #define LIBCLOGGER_CLOGGERCORE_H
 
+#include <mutex>
+#include <condition_variable>
+
 #include "ConcurrentQueue.h"
+
+#include "CloggerBackendBase.hpp"
+#include "CLogger.hpp"
+#include "CLoggerDefaultBackEnd.hpp"
+#include "CLoggerMessage.hpp"
 
 using namespace moodycamel;
 
@@ -28,17 +36,34 @@ public:
     //Vars
 
     //Funcs
-
-    CLoggerCore();
-
+    CLoggerCore(std::shared_ptr<CloggerBackendBase> backend = std::make_shared<CLoggerDefaultBackEnd>());
     ~CLoggerCore();
+
+    void                                start();
+    void                                stop();
+    void                                flush();
+    void                                setBackend(std::shared_ptr<CloggerBackendBase> backend, bool flushQueue);
+    std::shared_ptr<CloggerBackendBase> getBackend();
+
+    bool addMessageToQueue(CLoggerMessageStruct message);
 
 
 private:
 
     //Vars
+    std::shared_ptr<ConcurrentQueue<CLoggerMessageStruct>> messageQueue;
+    std::shared_ptr<CloggerBackendBase>                    backend;
+
+    std::shared_ptr<std::mutex>              mutex;
+    std::shared_ptr<std::condition_variable> conditionVar;
+    std::thread                              consumerThread;
+    std::shared_ptr<bool>                    isConsuming;
+    bool                                     isFlushing;
+
 
     //Funcs
+    static void run(std::shared_ptr<CloggerBackendBase> backend, std::shared_ptr<bool> isConsuming, std::shared_ptr<ConcurrentQueue<CLoggerMessageStruct>> messageQueue, std::shared_ptr<std::condition_variable> conditionVar, std::shared_ptr<std::mutex> mutex);
+
 
 };
 
