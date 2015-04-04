@@ -18,8 +18,6 @@ Copyright 2015 Alex Frappier Lachapelle
 
 CLoggerDefaultBackEnd::CLoggerDefaultBackEnd(){
 
-    time_t currentTime      = time(0);
-    tm *date                = localtime(&currentTime);
     std::string tmpFilePath;
 
     tmpFilePath =  "Logs/";
