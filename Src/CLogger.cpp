@@ -16,8 +16,8 @@ Copyright 2015 Alex Frappier Lachapelle
 
 #include "CLogger.hpp"
 
-CLogger::CLogger(){
-
+CLogger::CLogger(std::shared_ptr<CloggerBackendBase> backend){
+    cloggerCoreInstance = std::make_shared<CLoggerCore>(backend);
 }
 
 CLogger::~CLogger(){
@@ -25,15 +25,18 @@ CLogger::~CLogger(){
 }
 
 
-void CLogger::restart(){
-
+void CLogger::start(){
+    cloggerCoreInstance.get()->start();
 }
 
-void CLogger::stop(){
-
+void CLogger::stop(bool flush){
+    if(flush)
+        cloggerCoreInstance.get()->flush();
+    else
+        cloggerCoreInstance.get()->stop();
 }
 
 
-void CLogger::setBackEnd(){
-
+void CLogger::setBackEnd(std::shared_ptr<CloggerBackendBase> backend, bool flushQueue){
+    cloggerCoreInstance.get()->setBackend(backend, flushQueue);
 }

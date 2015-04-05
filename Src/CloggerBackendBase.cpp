@@ -16,10 +16,6 @@ Copyright 2015 Alex Frappier Lachapelle
 
 #include "CloggerBackendBase.hpp"
 
-CloggerBackendBase::CloggerBackendBase(){
+CloggerBackendBase::CloggerBackendBase(){}
 
-}
-
-CloggerBackendBase::~CloggerBackendBase(){
-
-}
+CloggerBackendBase::~CloggerBackendBase(){}

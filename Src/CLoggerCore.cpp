@@ -21,8 +21,7 @@ CLoggerCore::CLoggerCore(std::shared_ptr<CloggerBackendBase> backend)
           messageQueue(std::make_shared<ConcurrentQueue<CLoggerMessageStruct>>()),
           mutex(std::make_shared<std::mutex>()),
           conditionVar(std::make_shared<std::condition_variable>()),
-          isConsuming(std::make_shared<bool>()),
-          isFlushing(false){
+          isConsuming(std::make_shared<bool>()){
 
     this->backend.get()->onInit();
     start();
@@ -48,8 +47,6 @@ void CLoggerCore::stop(){
 void CLoggerCore::flush(){
 
     CLoggerMessageStruct msg = {};
-    //Stop accepting new messages.
-    isFlushing               = true;
 
     //Stop consuming.
     stop();
@@ -61,8 +58,6 @@ void CLoggerCore::flush(){
     }
 
     backend.get()->onExit();
-
-    isFlushing = false;
 
 }
 
@@ -85,7 +80,7 @@ std::shared_ptr<CloggerBackendBase> CLoggerCore::getBackend(){
 
 
 bool CLoggerCore::addMessageToQueue(CLoggerMessageStruct message){
-    if(!isFlushing){
+    if(*isConsuming){
         messageQueue.get()->enqueue(message);
         conditionVar.get()->notify_one();
         return true;

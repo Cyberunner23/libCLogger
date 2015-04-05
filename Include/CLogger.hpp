@@ -37,13 +37,13 @@ public:
 
     //Funcs
 
-    CLogger();
+    CLogger(std::shared_ptr<CloggerBackendBase> backend = std::make_shared<CLoggerDefaultBackEnd>());
     ~CLogger();
 
-    void restart();
-    void stop();
+    void start();
+    void stop(bool flush = false);
 
-    void setBackEnd();
+    void setBackEnd(std::shared_ptr<CloggerBackendBase> backend, bool flushQueue);
 
 
 private:

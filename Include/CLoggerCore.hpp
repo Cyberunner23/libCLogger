@@ -37,7 +37,7 @@ public:
     //Vars
 
     //Funcs
-    CLoggerCore(std::shared_ptr<CloggerBackendBase> backend = std::make_shared<CLoggerDefaultBackEnd>());
+    CLoggerCore(std::shared_ptr<CloggerBackendBase> backend);
     ~CLoggerCore();
 
     void                                start();
@@ -59,7 +59,6 @@ private:
     std::shared_ptr<std::condition_variable> conditionVar;
     std::thread                              consumerThread;
     std::shared_ptr<bool>                    isConsuming;
-    bool                                     isFlushing;
 
 
     //Funcs

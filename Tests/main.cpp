@@ -18,11 +18,9 @@ Copyright 2015 Alex Frappier Lachapelle
 
 int main(){
 
-    CLoggerDefaultBackEnd backEnd;
+    CLogger logger;
 
-    cloggerCoreInstance = std::make_shared<CLoggerCore>();
-
-    LOG(INFO, "tessssssssssssssssssssst")
+    LOG(INFO, "tessssssssssssrtyrtyrtyrtyssssssssst")
 
 
     return 0;
