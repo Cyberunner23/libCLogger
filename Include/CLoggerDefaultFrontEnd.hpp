@@ -36,7 +36,7 @@ Copyright 2015 Alex Frappier Lachapelle
     std::stringstream  ss; \
     ss << std::this_thread::get_id(); \
     msg.threadName     = ss.str(); \
-    cloggerCoreInstance.addMessageToQueue(msg);
+    cloggerCoreInstance.get()->addMessageToQueue(msg);
 
 
 

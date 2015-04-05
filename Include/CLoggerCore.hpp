@@ -26,6 +26,7 @@ Copyright 2015 Alex Frappier Lachapelle
 #include "CLoggerDefaultBackEnd.hpp"
 #include "CLoggerMessage.hpp"
 
+//TODO?: use something else than a shared_ptr for the global instance?
 
 using namespace moodycamel;
 
@@ -67,7 +68,7 @@ private:
 
 };
 
-extern CLoggerCore cloggerCoreInstance;
+extern std::shared_ptr<CLoggerCore> cloggerCoreInstance;
 
 
 #endif //LIBCLOGGER_CLOGGERCORE_H

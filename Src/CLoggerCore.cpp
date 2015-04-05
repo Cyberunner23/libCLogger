@@ -30,7 +30,7 @@ CLoggerCore::CLoggerCore(std::shared_ptr<CloggerBackendBase> backend)
 }
 
 CLoggerCore::~CLoggerCore(){
-
+    flush();
 }
 
 
@@ -59,6 +59,8 @@ void CLoggerCore::flush(){
         backend.get()->writeMessageToBackend(msg);
         msg = {};
     }
+
+    backend.get()->onExit();
 
     isFlushing = false;
 
@@ -94,15 +96,15 @@ bool CLoggerCore::addMessageToQueue(CLoggerMessageStruct message){
 
 void CLoggerCore::run(std::shared_ptr<CloggerBackendBase> backend, std::shared_ptr<bool> isConsuming, std::shared_ptr<ConcurrentQueue<CLoggerMessageStruct>> messageQueue, std::shared_ptr<std::condition_variable> conditionVar, std::shared_ptr<std::mutex> mutex){
 
-    while(isConsuming.get()){
+    while(*isConsuming){
 
         CLoggerMessageStruct msg = {};
         std::unique_lock<std::mutex> lock(*mutex);
 
         bool isDequeueSuccess;
-        conditionVar.get()->wait(lock, [&messageQueue, &msg, &isDequeueSuccess](){
+        conditionVar.get()->wait(lock, [&messageQueue, &msg, &isDequeueSuccess, &isConsuming](){
             isDequeueSuccess = messageQueue.get()->try_dequeue(msg);
-            return isDequeueSuccess;
+            return !*isConsuming || isDequeueSuccess;
         });
 
         //If we reach here and that isDequeueSuccess == false

@@ -53,7 +53,7 @@ bool CLoggerDefaultBackEnd::onInit(){
 
     if(outStream.is_open()){
 
-        outStream << "CLogger with default backend initialized on" << getDate() << "at" << getTime(time(0)) << std::endl << std::endl;
+        outStream << "CLogger with default backend initialized on " << getDate() << " at " << getTime(time(0)) << std::endl << std::endl;
 #ifdef ENABLE_DEBUG_INFO
         outStream << "[Time Written][Time Logged][Thread Name][File Name][File Line Number][Level]: Message" << std::endl;
 #else
@@ -80,6 +80,7 @@ void CLoggerDefaultBackEnd::writeMessageToBackend(CLoggerMessageStruct message){
     outStream << "[" << message.fileLineNumber << "]";
 #endif
     outStream << "[" << message.logLevel           << "]";
+    outStream << ": " << message.logMessage << std::endl;
 
 }
 

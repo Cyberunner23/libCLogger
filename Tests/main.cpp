@@ -14,46 +14,16 @@ Copyright 2015 Alex Frappier Lachapelle
    limitations under the License.
 */
 
-#ifndef LIBCLOGGER_CLOGGER_H
-#define LIBCLOGGER_CLOGGER_H
+#include "CLogger.hpp"
 
-#include <thread>
+int main(){
 
-#include "ConcurrentQueue.h"
+    CLoggerDefaultBackEnd backEnd;
 
-#include "CloggerBackendBase.hpp"
-#include "CLoggerCore.hpp"
-#include "CLoggerDefaultFrontEnd.hpp"
-#include "CLoggerMessage.hpp"
+    cloggerCoreInstance = std::make_shared<CLoggerCore>();
+
+    LOG(INFO, "tessssssssssssssssssssst")
 
 
-using namespace moodycamel;
-
-class CLogger{
-
-public:
-
-    //Vars
-
-    //Funcs
-
-    CLogger();
-    ~CLogger();
-
-    void restart();
-    void stop();
-
-    void setBackEnd();
-
-
-private:
-
-    //Vars
-
-    //Funcs
-
-};
-
-std::shared_ptr<CLoggerCore> cloggerCoreInstance = nullptr;
-
-#endif //LIBCLOGGER_CLOGGER_H
+    return 0;
+}
