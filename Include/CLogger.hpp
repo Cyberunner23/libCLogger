@@ -26,6 +26,7 @@ Copyright 2015 Alex Frappier Lachapelle
 #include "CLoggerDefaultFrontEnd.hpp"
 #include "CLoggerMessage.hpp"
 
+//TODO: MAJOR CLEANUP!!!
 
 using namespace moodycamel;
 
