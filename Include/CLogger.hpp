@@ -27,6 +27,7 @@ Copyright 2015 Alex Frappier Lachapelle
 #include "CLoggerMessage.hpp"
 
 //TODO: MAJOR CLEANUP!!!
+//TODO: Add .travis.yml
 
 using namespace moodycamel;
 
