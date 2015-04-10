@@ -27,6 +27,7 @@ Copyright 2015 Alex Frappier Lachapelle
 #include "CLoggerMessage.hpp"
 
 //TODO?: use something else than a shared_ptr for the global instance?
+//TODO?: change start/stop/flush behavior?
 
 using namespace moodycamel;
 
