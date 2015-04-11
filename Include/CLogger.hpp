@@ -29,6 +29,7 @@ Copyright 2015 Alex Frappier Lachapelle
 //TODO:  MAJOR CLEANUP!!!
 //TODO:  Add .travis.yml
 //TODO?: Offload initial log messages to the core?
+//TODO?: leave final message formatting to backend
 
 using namespace moodycamel;
 
