@@ -23,12 +23,12 @@ Copyright 2015 Alex Frappier Lachapelle
 
 #include "CloggerBackendBase.hpp"
 #include "CLoggerWorker.hpp"
-#include "CLoggerDefaultFrontEnd.hpp"
 #include "CLoggerMessage.hpp"
 
 //TODO:  DOCUMENTATION
 
 //TODO: Make main class a singleton.
+//TODO: unite Main class and Worker class.
 //TODO: Backend -> sink
 //TODO: Put default sink into the base class.
 //TODO: create a stream and printf like front end.

@@ -46,7 +46,6 @@ set(CLOGGER_HDR_FILES
     Include/CloggerBackendBase.hpp
     Include/CLoggerWorker.hpp
     Include/CLoggerDefaultBackEnd.hpp
-    Include/CLoggerDefaultFrontEnd.hpp
     Include/CLoggerMessage.hpp
     Include/CLoggerVer.hpp
     Include/Utils/ConcurrentQueue.h
