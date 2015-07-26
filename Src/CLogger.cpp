@@ -40,6 +40,6 @@ void CLogger::stop(bool flush){
 }
 
 
-void CLogger::setBackEnd(std::shared_ptr<CloggerBackendBase> backend, bool flushQueue){
+void CLogger::setBackEnd(std::shared_ptr<CloggerSinkBase> backend, bool flushQueue){
     //cloggerCoreInstance.get()->setBackend(backend, flushQueue);
 }

@@ -21,14 +21,12 @@ Copyright 2015 Alex Frappier Lachapelle
 
 #include "ConcurrentQueue.h"
 
-#include "CloggerBackendBase.hpp"
+#include "CloggerSinkBase.hpp"
 #include "CLoggerWorker.hpp"
 #include "CLoggerMessage.hpp"
 
 //TODO:  DOCUMENTATION
 
-//TODO: Make Main class a singleton.
-//TODO: Backend -> sink
 //TODO: Add thread safe calls to public functions from the sink.
 //TODO: Put default sink into the base class.
 //TODO: create a stream and printf like front end.
@@ -65,7 +63,7 @@ public:
     void start();
     void stop(bool flush = true);
 
-    void setBackEnd(std::shared_ptr<CloggerBackendBase> backend, bool flushQueue);
+    void setBackEnd(std::shared_ptr<CloggerSinkBase> backend, bool flushQueue);
 
 
 private:

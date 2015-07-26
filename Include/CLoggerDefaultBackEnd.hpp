@@ -19,10 +19,10 @@ Copyright 2015 Alex Frappier Lachapelle
 
 #include <fstream>
 
-#include "CloggerBackendBase.hpp"
+#include "CloggerSinkBase.hpp"
 #include "Typedefs.hpp"
 
-class CLoggerDefaultBackEnd : public CloggerBackendBase{
+class CLoggerDefaultBackEnd : public CloggerSinkBase{
 
 public:
 

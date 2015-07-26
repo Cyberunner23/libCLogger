@@ -14,34 +14,8 @@ Copyright 2015 Alex Frappier Lachapelle
    limitations under the License.
 */
 
-#ifndef LIBCLOGGER_CLOGGERBACKENDBASE_H
-#define LIBCLOGGER_CLOGGERBACKENDBASE_H
+#include "CloggerSinkBase.hpp"
 
-#include "CLoggerMessage.hpp"
+CloggerSinkBase::CloggerSinkBase(){}
 
-class CloggerBackendBase{
-
-public:
-
-    //Vars
-
-    //Funcs
-
-    CloggerBackendBase();
-    ~CloggerBackendBase();
-
-    virtual bool onInit() = 0;
-    virtual void onExit() = 0;
-
-    virtual void writeMessageToBackend(CLoggerMessageStruct message) = 0;
-
-
-private:
-
-    //Vars
-
-    //Funcs
-
-};
-
-#endif //LIBCLOGGER_CLOGGERBACKENDBASE_H
+CloggerSinkBase::~CloggerSinkBase(){}

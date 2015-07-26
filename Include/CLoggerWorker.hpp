@@ -22,7 +22,7 @@ Copyright 2015 Alex Frappier Lachapelle
 
 #include "ConcurrentQueue.h"
 
-#include "CloggerBackendBase.hpp"
+#include "CloggerSinkBase.hpp"
 #include "CLoggerDefaultBackEnd.hpp"
 #include "CLoggerMessage.hpp"
 
@@ -38,14 +38,14 @@ public:
     //Vars
 
     //Funcs
-    CLoggerWorker(std::shared_ptr<CloggerBackendBase> backend);
+    CLoggerWorker(std::shared_ptr<CloggerSinkBase> backend);
     ~CLoggerWorker();
 
     void                                start();
     void                                stop();
     void                                flush();
-    void                                setBackend(std::shared_ptr<CloggerBackendBase> backend, bool flushQueue);
-    std::shared_ptr<CloggerBackendBase> getBackend();
+    void                                setBackend(std::shared_ptr<CloggerSinkBase> backend, bool flushQueue);
+    std::shared_ptr<CloggerSinkBase> getBackend();
 
     bool addMessageToQueue(CLoggerMessageStruct message);
 
@@ -54,7 +54,7 @@ private:
 
     //Vars
     std::shared_ptr<ConcurrentQueue<CLoggerMessageStruct>> messageQueue;
-    std::shared_ptr<CloggerBackendBase>                    backend;
+    std::shared_ptr<CloggerSinkBase>                    backend;
 
     std::shared_ptr<std::mutex>              mutex;
     std::shared_ptr<std::condition_variable> conditionVar;
@@ -63,7 +63,7 @@ private:
 
 
     //Funcs
-    static void run(std::shared_ptr<CloggerBackendBase> backend, std::shared_ptr<bool> isConsuming, std::shared_ptr<ConcurrentQueue<CLoggerMessageStruct>> messageQueue, std::shared_ptr<std::condition_variable> conditionVar, std::shared_ptr<std::mutex> mutex);
+    static void run(std::shared_ptr<CloggerSinkBase> backend, std::shared_ptr<bool> isConsuming, std::shared_ptr<ConcurrentQueue<CLoggerMessageStruct>> messageQueue, std::shared_ptr<std::condition_variable> conditionVar, std::shared_ptr<std::mutex> mutex);
 
 
 };
