@@ -53,7 +53,7 @@ void CLoggerWorker::flush(){
 
     //Write what's left in the queue;
     while(messageQueue.get()->try_dequeue(msg)){
-        backend.get()->writeMessageToBackend(msg);
+        backend.get()->writeMessage(msg);
         msg = {};
     }
 
@@ -106,7 +106,7 @@ void CLoggerWorker::run(std::shared_ptr<CLoggerSinkBase> backend, std::shared_pt
         //Then notify_one was called while the queue was empty
         //If so, don't write an empty message.
         if(isDequeueSuccess){
-            backend.get()->writeMessageToBackend(msg);
+            backend.get()->writeMessage(msg);
         }
     }
 }

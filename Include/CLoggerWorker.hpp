@@ -23,7 +23,6 @@ Copyright 2015 Alex Frappier Lachapelle
 #include "ConcurrentQueue.h"
 
 #include "CLoggerSinkBase.hpp"
-#include "CLoggerDefaultBackEnd.hpp"
 #include "CLoggerMessage.hpp"
 
 //TODO?: use something else than a shared_ptr for the global instance?

@@ -17,7 +17,10 @@ Copyright 2015 Alex Frappier Lachapelle
 #ifndef LIBCLOGGER_CLOGGERBACKENDBASE_H
 #define LIBCLOGGER_CLOGGERBACKENDBASE_H
 
+#include <fstream>
+
 #include "CLoggerMessage.hpp"
+#include "Typedefs.hpp"
 
 class CLoggerSinkBase{
 
@@ -30,17 +33,24 @@ public:
     CLoggerSinkBase();
     ~CLoggerSinkBase();
 
-    virtual bool onInit() = 0;
-    virtual void onExit() = 0;
+    virtual bool onInit();
+    virtual void onExit();
 
-    virtual void writeMessageToBackend(CLoggerMessageStruct message) = 0;
+    virtual void writeMessage(CLoggerMessageStruct message);
 
 
 private:
 
     //Vars
+    std::ofstream outStream;
+    std::string   logFilePath;
 
     //Funcs
+    std::string getDate();
+    std::string getTime(time_t time);
+
+    bool doesFileExist(std::string logFile);
+    bool isFileEmpty(std::string logFile);
 
 };
 
