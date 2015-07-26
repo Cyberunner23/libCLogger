@@ -21,7 +21,7 @@ Copyright 2015 Alex Frappier Lachapelle
 
 #include "ConcurrentQueue.h"
 
-#include "CloggerSinkBase.hpp"
+#include "CLoggerSinkBase.hpp"
 #include "CLoggerWorker.hpp"
 #include "CLoggerMessage.hpp"
 
@@ -63,7 +63,7 @@ public:
     void start();
     void stop(bool flush = true);
 
-    void setBackEnd(std::shared_ptr<CloggerSinkBase> backend, bool flushQueue);
+    void setBackEnd(std::shared_ptr<CLoggerSinkBase> backend, bool flushQueue);
 
 
 private:

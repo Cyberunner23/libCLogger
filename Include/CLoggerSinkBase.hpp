@@ -19,7 +19,7 @@ Copyright 2015 Alex Frappier Lachapelle
 
 #include "CLoggerMessage.hpp"
 
-class CloggerSinkBase{
+class CLoggerSinkBase{
 
 public:
 
@@ -27,8 +27,8 @@ public:
 
     //Funcs
 
-    CloggerSinkBase();
-    ~CloggerSinkBase();
+    CLoggerSinkBase();
+    ~CLoggerSinkBase();
 
     virtual bool onInit() = 0;
     virtual void onExit() = 0;

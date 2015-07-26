@@ -16,7 +16,7 @@ Copyright 2015 Alex Frappier Lachapelle
 
 #include "CLoggerWorker.hpp"
 
-CLoggerWorker::CLoggerWorker(std::shared_ptr<CloggerSinkBase> backend)
+CLoggerWorker::CLoggerWorker(std::shared_ptr<CLoggerSinkBase> backend)
         : backend(backend),
           messageQueue(std::make_shared<ConcurrentQueue<CLoggerMessageStruct>>()),
           mutex(std::make_shared<std::mutex>()),
@@ -61,7 +61,7 @@ void CLoggerWorker::flush(){
 
 }
 
-void CLoggerWorker::setBackend(std::shared_ptr<CloggerSinkBase> backend, bool flushQueue){
+void CLoggerWorker::setBackend(std::shared_ptr<CLoggerSinkBase> backend, bool flushQueue){
 
     if(flushQueue)
         flush();
@@ -74,7 +74,7 @@ void CLoggerWorker::setBackend(std::shared_ptr<CloggerSinkBase> backend, bool fl
 
 }
 
-std::shared_ptr<CloggerSinkBase> CLoggerWorker::getBackend(){
+std::shared_ptr<CLoggerSinkBase> CLoggerWorker::getBackend(){
     return backend;
 }
 
@@ -89,7 +89,7 @@ bool CLoggerWorker::addMessageToQueue(CLoggerMessageStruct message){
 }
 
 
-void CLoggerWorker::run(std::shared_ptr<CloggerSinkBase> backend, std::shared_ptr<bool> isConsuming, std::shared_ptr<ConcurrentQueue<CLoggerMessageStruct>> messageQueue, std::shared_ptr<std::condition_variable> conditionVar, std::shared_ptr<std::mutex> mutex){
+void CLoggerWorker::run(std::shared_ptr<CLoggerSinkBase> backend, std::shared_ptr<bool> isConsuming, std::shared_ptr<ConcurrentQueue<CLoggerMessageStruct>> messageQueue, std::shared_ptr<std::condition_variable> conditionVar, std::shared_ptr<std::mutex> mutex){
 
     while(*isConsuming){
 

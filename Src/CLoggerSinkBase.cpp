@@ -14,8 +14,8 @@ Copyright 2015 Alex Frappier Lachapelle
    limitations under the License.
 */
 
-#include "CloggerSinkBase.hpp"
+#include "CLoggerSinkBase.hpp"
 
-CloggerSinkBase::CloggerSinkBase(){}
+CLoggerSinkBase::CLoggerSinkBase(){}
 
-CloggerSinkBase::~CloggerSinkBase(){}
+CLoggerSinkBase::~CLoggerSinkBase(){}
