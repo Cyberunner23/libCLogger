@@ -28,7 +28,7 @@ Copyright 2015 Alex Frappier Lachapelle
 
 //TODO:  DOCUMENTATION
 
-//TODO: Make main class a singleton
+//TODO: Make main class a singleton.
 //TODO: Backend -> sink
 //TODO: Put default sink into the base class.
 //TODO: create a stream and printf like front end.
