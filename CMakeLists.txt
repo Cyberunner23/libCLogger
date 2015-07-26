@@ -49,12 +49,12 @@ set(CLOGGER_HDR_FILES
     Include/CLoggerDefaultFrontEnd.hpp
     Include/CLoggerMessage.hpp
     Include/CLoggerVer.hpp
-    Include/Tools/ConcurrentQueue.h
-    Include/Tools/Typedefs.hpp
+    Include/Utils/ConcurrentQueue.h
+    Include/Utils/Typedefs.hpp
 
 )
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/Include)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/Include/Tools)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/Include/Utils)
 
 
 #----------------------------------------------------------
