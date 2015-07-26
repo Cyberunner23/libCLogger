@@ -27,9 +27,9 @@ Copyright 2015 Alex Frappier Lachapelle
 
 //TODO:  DOCUMENTATION
 
-//TODO: Make main class a singleton.
-//TODO: unite Main class and Worker class.
+//TODO: Make Main class a singleton.
 //TODO: Backend -> sink
+//TODO: Add thread safe calls to public functions from the sink.
 //TODO: Put default sink into the base class.
 //TODO: create a stream and printf like front end.
 //TODO: clean up the message struct
@@ -48,11 +48,22 @@ public:
 
     //Funcs
 
-    CLogger(std::shared_ptr<CloggerBackendBase> backend = std::make_shared<CLoggerDefaultBackEnd>());
-    ~CLogger();
 
+    /*  //ChannelID -> 0 = all channels, 1 = default channel, x = customChannel
+     *  CLogger::getInstance().addSink(customSinkClass, ChannelID);
+     *  ...
+     *  CLogger::getInstance().init(bool initWithDefaultSink = true);
+     *
+     * */
+
+
+    static CLogger* getInstance();
+
+
+
+    //TODO: MAKE THESE THREAD SAFE
     void start();
-    void stop(bool flush = false);
+    void stop(bool flush = true);
 
     void setBackEnd(std::shared_ptr<CloggerBackendBase> backend, bool flushQueue);
 
@@ -60,11 +71,14 @@ public:
 private:
 
     //Vars
+    static std::unique_ptr<CLogger> instance;
 
     //Funcs
+    CLogger(){};
+    CLogger(CLogger const&){};
+    CLogger& operator=(CLogger const&){};
+
 
 };
-
-std::shared_ptr<CLoggerWorker> cloggerCoreInstance = nullptr;
 
 #endif //LIBCLOGGER_CLOGGER_H

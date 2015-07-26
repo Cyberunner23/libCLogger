@@ -14,13 +14,15 @@ Copyright 2015 Alex Frappier Lachapelle
    limitations under the License.
 */
 
+#include <iostream>
 #include "CLogger.hpp"
 
 int main(){
 
-    CLogger logger;
+    std::unique_ptr<int> test;
 
-    LOG(INFO, "tessssssssssssrtyrtyrtyrtyssssssssst")
+    if(test.get() == nullptr)
+        std::cout << "NULL" << std::endl;
 
 
     return 0;

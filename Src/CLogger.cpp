@@ -16,27 +16,30 @@ Copyright 2015 Alex Frappier Lachapelle
 
 #include "CLogger.hpp"
 
-CLogger::CLogger(std::shared_ptr<CloggerBackendBase> backend){
-    cloggerCoreInstance = std::make_shared<CLoggerWorker>(backend);
-}
+std::unique_ptr<CLogger> CLogger::instance = nullptr;
 
-CLogger::~CLogger(){
+CLogger* CLogger::getInstance(){
 
+    if(instance.get() == nullptr){
+       instance = std::unique_ptr<CLogger>(new CLogger());
+    }
+
+    return instance.get();
 }
 
 
 void CLogger::start(){
-    cloggerCoreInstance.get()->start();
+    //cloggerCoreInstance.get()->start();
 }
 
 void CLogger::stop(bool flush){
-    if(flush)
-        cloggerCoreInstance.get()->flush();
-    else
-        cloggerCoreInstance.get()->stop();
+    //if(flush)
+        //cloggerCoreInstance.get()->flush();
+    //else
+        //cloggerCoreInstance.get()->stop();
 }
 
 
 void CLogger::setBackEnd(std::shared_ptr<CloggerBackendBase> backend, bool flushQueue){
-    cloggerCoreInstance.get()->setBackend(backend, flushQueue);
+    //cloggerCoreInstance.get()->setBackend(backend, flushQueue);
 }
