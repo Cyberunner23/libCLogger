@@ -14,9 +14,9 @@ Copyright 2015 Alex Frappier Lachapelle
    limitations under the License.
 */
 
-#include "CLoggerCore.hpp"
+#include "CLoggerWorker.hpp"
 
-CLoggerCore::CLoggerCore(std::shared_ptr<CloggerBackendBase> backend)
+CLoggerWorker::CLoggerWorker(std::shared_ptr<CloggerBackendBase> backend)
         : backend(backend),
           messageQueue(std::make_shared<ConcurrentQueue<CLoggerMessageStruct>>()),
           mutex(std::make_shared<std::mutex>()),
@@ -28,23 +28,23 @@ CLoggerCore::CLoggerCore(std::shared_ptr<CloggerBackendBase> backend)
 
 }
 
-CLoggerCore::~CLoggerCore(){
+CLoggerWorker::~CLoggerWorker(){
     flush();
 }
 
 
-void CLoggerCore::start(){
+void CLoggerWorker::start(){
     *isConsuming   = true;
     consumerThread = std::thread(run, backend, isConsuming, messageQueue, conditionVar, mutex);
 }
 
-void CLoggerCore::stop(){
+void CLoggerWorker::stop(){
     *isConsuming = false;
     conditionVar.get()->notify_one();
     consumerThread.join();
 }
 
-void CLoggerCore::flush(){
+void CLoggerWorker::flush(){
 
     CLoggerMessageStruct msg = {};
 
@@ -61,7 +61,7 @@ void CLoggerCore::flush(){
 
 }
 
-void CLoggerCore::setBackend(std::shared_ptr<CloggerBackendBase> backend, bool flushQueue){
+void CLoggerWorker::setBackend(std::shared_ptr<CloggerBackendBase> backend, bool flushQueue){
 
     if(flushQueue)
         flush();
@@ -74,12 +74,12 @@ void CLoggerCore::setBackend(std::shared_ptr<CloggerBackendBase> backend, bool f
 
 }
 
-std::shared_ptr<CloggerBackendBase> CLoggerCore::getBackend(){
+std::shared_ptr<CloggerBackendBase> CLoggerWorker::getBackend(){
     return backend;
 }
 
 
-bool CLoggerCore::addMessageToQueue(CLoggerMessageStruct message){
+bool CLoggerWorker::addMessageToQueue(CLoggerMessageStruct message){
     if(*isConsuming){
         messageQueue.get()->enqueue(message);
         conditionVar.get()->notify_one();
@@ -89,7 +89,7 @@ bool CLoggerCore::addMessageToQueue(CLoggerMessageStruct message){
 }
 
 
-void CLoggerCore::run(std::shared_ptr<CloggerBackendBase> backend, std::shared_ptr<bool> isConsuming, std::shared_ptr<ConcurrentQueue<CLoggerMessageStruct>> messageQueue, std::shared_ptr<std::condition_variable> conditionVar, std::shared_ptr<std::mutex> mutex){
+void CLoggerWorker::run(std::shared_ptr<CloggerBackendBase> backend, std::shared_ptr<bool> isConsuming, std::shared_ptr<ConcurrentQueue<CLoggerMessageStruct>> messageQueue, std::shared_ptr<std::condition_variable> conditionVar, std::shared_ptr<std::mutex> mutex){
 
     while(*isConsuming){
 

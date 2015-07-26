@@ -17,7 +17,7 @@ Copyright 2015 Alex Frappier Lachapelle
 #include "CLogger.hpp"
 
 CLogger::CLogger(std::shared_ptr<CloggerBackendBase> backend){
-    cloggerCoreInstance = std::make_shared<CLoggerCore>(backend);
+    cloggerCoreInstance = std::make_shared<CLoggerWorker>(backend);
 }
 
 CLogger::~CLogger(){

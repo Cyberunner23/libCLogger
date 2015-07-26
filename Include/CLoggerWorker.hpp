@@ -31,15 +31,15 @@ Copyright 2015 Alex Frappier Lachapelle
 
 using namespace moodycamel;
 
-class CLoggerCore{
+class CLoggerWorker{
 
 public:
 
     //Vars
 
     //Funcs
-    CLoggerCore(std::shared_ptr<CloggerBackendBase> backend);
-    ~CLoggerCore();
+    CLoggerWorker(std::shared_ptr<CloggerBackendBase> backend);
+    ~CLoggerWorker();
 
     void                                start();
     void                                stop();
@@ -68,7 +68,7 @@ private:
 
 };
 
-extern std::shared_ptr<CLoggerCore> cloggerCoreInstance;
+extern std::shared_ptr<CLoggerWorker> cloggerCoreInstance;
 
 
 #endif //LIBCLOGGER_CLOGGERCORE_H

@@ -12,36 +12,39 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8.7)
-PROJECT(libCLogger CXX)
+cmake_minimum_required(VERSION 2.8.7)
+project(libCLogger CXX)
 
 
 #----------------------------------------------------------
 ####################### OPTIONS ###########################
 #----------------------------------------------------------
-OPTION(LIBCLOGGER_BUILD_SHARED_LIBRARIES "Build libCLogger as a shared Lib (setting this to OFF will compile statically)" ON)
+option(LIBCLOGGER_BUILD_SHARED_LIBRARIES "Build libCLogger as a shared Lib (setting this to OFF will compile statically)" ON)
 
 
 #----------------------------------------------------------
 ##################### COMPILER FLAGS ######################
 #----------------------------------------------------------
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
+if(UNIX OR CYGWIN OR MINGW)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lpthread")
+endif()
 
 #----------------------------------------------------------
 #################### SOURCE / HEADERS #####################
 #----------------------------------------------------------
-SET(CLOGGER_SRC_FILES
+set(CLOGGER_SRC_FILES
     Src/CLogger.cpp
     Src/CloggerBackendBase.cpp
-    Src/CLoggerCore.cpp
+    Src/CLoggerWorker.cpp
     Src/CLoggerDefaultBackEnd.cpp
 )
 
-SET(CLOGGER_HDR_FILES
+set(CLOGGER_HDR_FILES
     Include/CLogger.hpp
     Include/CloggerBackendBase.hpp
-    Include/CLoggerCore.hpp
+    Include/CLoggerWorker.hpp
     Include/CLoggerDefaultBackEnd.hpp
     Include/CLoggerDefaultFrontEnd.hpp
     Include/CLoggerMessage.hpp
@@ -50,8 +53,8 @@ SET(CLOGGER_HDR_FILES
     Include/Tools/Typedefs.hpp
 
 )
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/Include)
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/Include/Tools)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/Include)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/Include/Tools)
 
 
 #----------------------------------------------------------
@@ -59,12 +62,12 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/Include/Tools)
 #----------------------------------------------------------
 
 IF(LIBCLOGGER_BUILD_SHARED_LIBRARIES)
-    ADD_LIBRARY(libCLogger SHARED ${CLOGGER_SRC_FILES} ${CLOGGER_HDR_FILES})
+    add_library(libCLogger SHARED ${CLOGGER_SRC_FILES} ${CLOGGER_HDR_FILES})
 ELSE(LIBCLOGGER_BUILD_SHARED_LIBRARIES)
-    ADD_LIBRARY(libCLogger STATIC ${CLOGGER_SRC_FILES} ${CLOGGER_HDR_FILES})
+    add_library(libCLogger STATIC ${CLOGGER_SRC_FILES} ${CLOGGER_HDR_FILES})
 ENDIF(LIBCLOGGER_BUILD_SHARED_LIBRARIES)
 
-SET_TARGET_PROPERTIES(libCLogger PROPERTIES
+set_target_properties(libCLogger PROPERTIES
     LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/Lib
     ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/Lib
     OUTPUT_NAME "CLogger"
@@ -74,10 +77,8 @@ SET_TARGET_PROPERTIES(libCLogger PROPERTIES
 
 #TEMPORARY TEST STUFF
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lpthread")
-
-ENABLE_TESTING()
-ADD_SUBDIRECTORY("${CMAKE_CURRENT_SOURCE_DIR}/Tests")
+#ENABLE_TESTING()
+#ADD_SUBDIRECTORY("${CMAKE_CURRENT_SOURCE_DIR}/Tests")
 
 
 

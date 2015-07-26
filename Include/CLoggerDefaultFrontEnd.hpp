@@ -18,7 +18,7 @@ Copyright 2015 Alex Frappier Lachapelle
 #define LIBCLOGGER_CLOGGERDEFAULTFRONTEND_HPP
 
 #include <sstream>
-#include "CLoggerCore.hpp"
+#include "CLoggerWorker.hpp"
 
 #define INFO    "INFO"
 #define WARNING "WARNING"

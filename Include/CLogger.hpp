@@ -22,13 +22,21 @@ Copyright 2015 Alex Frappier Lachapelle
 #include "ConcurrentQueue.h"
 
 #include "CloggerBackendBase.hpp"
-#include "CLoggerCore.hpp"
+#include "CLoggerWorker.hpp"
 #include "CLoggerDefaultFrontEnd.hpp"
 #include "CLoggerMessage.hpp"
 
-//TODO:  MAJOR CLEANUP!!!
-//TODO?: Offload initial log messages to the core?
-//TODO?: leave final message formatting to backend
+//TODO:  DOCUMENTATION
+
+//TODO: Make main class a singleton
+//TODO: Backend -> sink
+//TODO: Put default sink into the base class.
+//TODO: create a stream and printf like front end.
+//TODO: clean up the message struct
+//TODO: Implement cross platform crash handler
+//TODO: Add multiple sink support with channels
+//          to send the log to a certain sink
+//          or a group of sinks
 
 using namespace moodycamel;
 
@@ -57,6 +65,6 @@ private:
 
 };
 
-std::shared_ptr<CLoggerCore> cloggerCoreInstance = nullptr;
+std::shared_ptr<CLoggerWorker> cloggerCoreInstance = nullptr;
 
 #endif //LIBCLOGGER_CLOGGER_H
