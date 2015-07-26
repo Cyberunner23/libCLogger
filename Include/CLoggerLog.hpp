@@ -19,14 +19,20 @@ Copyright 2015 Alex Frappier Lachapelle
 
 #include <ctime>
 #include <string>
+#include <Utils/Typedefs.hpp>
 
-struct CLoggerMessageStruct{
+struct CLoggerLogLevel{
+    std::string logLevelString;
+    bool        isLogFatal;
+};
+
+struct CLoggerLogStruct{
+    uint32            channelID;
     std::string       logMessage;
-    unsigned long int fileLineNumber;
+    uint64            lineNumber;
     std::string       fileName;
     std::time_t       timeAtLog;
-    std::string       logLevel;
-    bool              isLogFatal;
+    CLoggerLogLevel   logLevel;
     std::string       threadName;
 };
 

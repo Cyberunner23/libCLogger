@@ -19,7 +19,7 @@ Copyright 2015 Alex Frappier Lachapelle
 
 #include <fstream>
 
-#include "CLoggerMessage.hpp"
+#include "CLoggerLog.hpp"
 #include "Typedefs.hpp"
 
 class CLoggerSinkBase{
@@ -36,7 +36,7 @@ public:
     virtual bool onInit();
     virtual void onExit();
 
-    virtual void writeMessage(CLoggerMessageStruct message);
+    virtual void writeMessage(CLoggerLogStruct message);
 
 
 private:

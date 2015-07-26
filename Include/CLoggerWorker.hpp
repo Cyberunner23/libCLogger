@@ -23,7 +23,7 @@ Copyright 2015 Alex Frappier Lachapelle
 #include "ConcurrentQueue.h"
 
 #include "CLoggerSinkBase.hpp"
-#include "CLoggerMessage.hpp"
+#include "CLoggerLog.hpp"
 
 //TODO?: use something else than a shared_ptr for the global instance?
 //TODO?: change start/stop/flush behavior?
@@ -46,13 +46,13 @@ public:
     void                                setBackend(std::shared_ptr<CLoggerSinkBase> backend, bool flushQueue);
     std::shared_ptr<CLoggerSinkBase> getBackend();
 
-    bool addMessageToQueue(CLoggerMessageStruct message);
+    bool addMessageToQueue(CLoggerLogStruct message);
 
 
 private:
 
     //Vars
-    std::shared_ptr<ConcurrentQueue<CLoggerMessageStruct>> messageQueue;
+    std::shared_ptr<ConcurrentQueue<CLoggerLogStruct>> messageQueue;
     std::shared_ptr<CLoggerSinkBase>                    backend;
 
     std::shared_ptr<std::mutex>              mutex;
@@ -62,7 +62,7 @@ private:
 
 
     //Funcs
-    static void run(std::shared_ptr<CLoggerSinkBase> backend, std::shared_ptr<bool> isConsuming, std::shared_ptr<ConcurrentQueue<CLoggerMessageStruct>> messageQueue, std::shared_ptr<std::condition_variable> conditionVar, std::shared_ptr<std::mutex> mutex);
+    static void run(std::shared_ptr<CLoggerSinkBase> backend, std::shared_ptr<bool> isConsuming, std::shared_ptr<ConcurrentQueue<CLoggerLogStruct>> messageQueue, std::shared_ptr<std::condition_variable> conditionVar, std::shared_ptr<std::mutex> mutex);
 
 
 };

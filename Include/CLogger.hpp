@@ -23,14 +23,13 @@ Copyright 2015 Alex Frappier Lachapelle
 
 #include "CLoggerSinkBase.hpp"
 #include "CLoggerWorker.hpp"
-#include "CLoggerMessage.hpp"
+#include "CLoggerLog.hpp"
 
 //TODO:  DOCUMENTATION
 
 //TODO: Add thread safe calls to public functions from the sink.
 //TODO: Put default sink into the base class.
 //TODO: create a stream and printf like front end.
-//TODO: clean up the message struct
 //TODO: Implement cross platform crash handler
 //TODO: Add multiple sink support with channels
 //          to send the log to a certain sink

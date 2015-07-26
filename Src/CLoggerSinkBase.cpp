@@ -71,16 +71,16 @@ void CLoggerSinkBase::onExit(){
 }
 
 
-void CLoggerSinkBase::writeMessage(CLoggerMessageStruct message){
-    outStream << "[" << getTime(time(0))           << "]";
-    outStream << "[" << getTime(message.timeAtLog) << "]";
-    outStream << "[" << message.threadName         << "]";
+void CLoggerSinkBase::writeMessage(CLoggerLogStruct message){
+    outStream << "[" << getTime(time(0))                 << "]";
+    outStream << "[" << getTime(message.timeAtLog)       << "]";
+    outStream << "[" << message.threadName               << "]";
 #ifdef ENABLE_DEBUG_INFO
-    outStream << "[" << message.fileName           << "]";
-    outStream << "[" << message.fileLineNumber     << "]";
+    outStream << "[" << message.fileName                 << "]";
+    outStream << "[" << message.lineNumber               << "]";
 #endif
-    outStream << "["  << message.logLevel          << "]";
-    outStream << ": " << message.logMessage        << std::endl;
+    outStream << "["  << message.logLevel.logLevelString << "]";
+    outStream << ": " << message.logMessage              << std::endl;
 }
 
 
