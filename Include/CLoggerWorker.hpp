@@ -44,7 +44,7 @@ public:
     void                                stop();
     void                                flush();
     void                                setBackend(std::shared_ptr<CLoggerSinkBase> backend, bool flushQueue);
-    std::shared_ptr<CLoggerSinkBase> getBackend();
+    std::shared_ptr<CLoggerSinkBase>    getBackend();
 
     bool addMessageToQueue(CLoggerLogStruct message);
 
@@ -53,7 +53,7 @@ private:
 
     //Vars
     std::shared_ptr<ConcurrentQueue<CLoggerLogStruct>> messageQueue;
-    std::shared_ptr<CLoggerSinkBase>                    backend;
+    std::shared_ptr<CLoggerSinkBase>                   backend;
 
     std::shared_ptr<std::mutex>              mutex;
     std::shared_ptr<std::condition_variable> conditionVar;

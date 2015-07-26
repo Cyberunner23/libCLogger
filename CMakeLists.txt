@@ -47,6 +47,7 @@ set(CLOGGER_HDR_FILES
     Include/CLoggerLog.hpp
     Include/CLoggerVer.hpp
     Include/Utils/ConcurrentQueue.h
+    Include/Utils/DevMacros.hpp
     Include/Utils/Typedefs.hpp
 
 )

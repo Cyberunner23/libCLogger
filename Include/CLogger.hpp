@@ -21,19 +21,19 @@ Copyright 2015 Alex Frappier Lachapelle
 
 #include "ConcurrentQueue.h"
 
+#include "DevMacros.hpp"
 #include "CLoggerSinkBase.hpp"
 #include "CLoggerWorker.hpp"
 #include "CLoggerLog.hpp"
 
 //TODO:  DOCUMENTATION
 
-//TODO: Add thread safe calls to public functions from the sink.
-//TODO: Put default sink into the base class.
 //TODO: create a stream and printf like front end.
 //TODO: Implement cross platform crash handler
 //TODO: Add multiple sink support with channels
 //          to send the log to a certain sink
 //          or a group of sinks
+//TODO: Change the Worker according to the other changes made.
 
 using namespace moodycamel;
 
@@ -47,7 +47,7 @@ public:
 
 
     /*  //ChannelID -> 0 = all channels, 1 = default channel, x = customChannel
-     *  CLogger::getInstance().addSink(customSinkClass, ChannelID);
+     *  CLogger::getInstance().addSink(customSinkClass, sinkID);
      *  ...
      *  CLogger::getInstance().init(bool initWithDefaultSink = true);
      *
@@ -56,13 +56,18 @@ public:
 
     static CLogger* getInstance();
 
+    bool addSink(std::shared_ptr<CLoggerSinkBase> sink, uint32 sinkID);
+    bool removeSink(uint32 channelID);
+    void addLogLevel(uint32 logLevelID, std::string logLevelString, bool isFatal);
+    void addLogLevel(uint32 logLevelID, CLoggerLogLevel logLevel);
+    bool removeLogLevel(uint32 logLevelID);
+    bool removeLogLevel(CLoggerLogLevel logLevel);
 
 
-    //TODO: MAKE THESE THREAD SAFE
+
+    //TODO: MAKE THESE THREAD SAFE/ATOMIC
     void start();
     void stop(bool flush = true);
-
-    void setBackEnd(std::shared_ptr<CLoggerSinkBase> backend, bool flushQueue);
 
 
 private:
