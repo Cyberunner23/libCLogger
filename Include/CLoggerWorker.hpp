@@ -17,13 +17,16 @@ Copyright 2015 Alex Frappier Lachapelle
 #ifndef LIBCLOGGER_CLOGGERCORE_H
 #define LIBCLOGGER_CLOGGERCORE_H
 
-#include <mutex>
 #include <condition_variable>
+
+#include <map>
+#include <mutex>
 
 #include "ConcurrentQueue.h"
 
 #include "CLoggerSinkBase.hpp"
 #include "CLoggerLog.hpp"
+#include "DevMacros.hpp"
 
 //TODO?: use something else than a shared_ptr for the global instance?
 //TODO?: change start/stop/flush behavior?
@@ -37,14 +40,17 @@ public:
     //Vars
 
     //Funcs
-    CLoggerWorker(std::shared_ptr<CLoggerSinkBase> backend);
+    CLoggerWorker();
     ~CLoggerWorker();
 
-    void                                start();
-    void                                stop();
-    void                                flush();
-    void                                setBackend(std::shared_ptr<CLoggerSinkBase> backend, bool flushQueue);
-    std::shared_ptr<CLoggerSinkBase>    getBackend();
+    void start();
+    void stop();
+    void pause();
+    void resume();
+    void flush();
+
+    void addSink(std::shared_ptr<CLoggerSinkBase> sink, uint32 sinkID);
+    bool removeSink(uint32 channelID);
 
     bool addMessageToQueue(CLoggerLogStruct message);
 
@@ -52,22 +58,26 @@ public:
 private:
 
     //Vars
-    std::shared_ptr<ConcurrentQueue<CLoggerLogStruct>> messageQueue;
-    std::shared_ptr<CLoggerSinkBase>                   backend;
 
-    std::shared_ptr<std::mutex>              mutex;
+    std::shared_ptr<ConcurrentQueue<CLoggerLogStruct>>                  logQueue;
+    std::shared_ptr<std::map<uint32, std::shared_ptr<CLoggerSinkBase>>> sinkMap;
+
+    std::thread                              workerThread;
     std::shared_ptr<std::condition_variable> conditionVar;
-    std::thread                              consumerThread;
-    std::shared_ptr<bool>                    isConsuming;
+    std::shared_ptr<std::mutex>              mutex;
 
+    std::shared_ptr<std::atomic<bool>> isRunning;
+    std::shared_ptr<std::atomic<bool>> isSuspended;
+    std::shared_ptr<std::atomic<bool>> isFlushing;
 
     //Funcs
-    static void run(std::shared_ptr<CLoggerSinkBase> backend, std::shared_ptr<bool> isConsuming, std::shared_ptr<ConcurrentQueue<CLoggerLogStruct>> messageQueue, std::shared_ptr<std::condition_variable> conditionVar, std::shared_ptr<std::mutex> mutex);
+    static void run(std::shared_ptr<ConcurrentQueue<CLoggerLogStruct>> logQueue,
+                    std::shared_ptr<std::map<uint32, std::shared_ptr<CLoggerSinkBase>>> sinkMap,
+                    std::shared_ptr<std::atomic<bool>> isSuspended,
+                    std::shared_ptr<std::condition_variable> conditionVar,
+                    std::shared_ptr<std::mutex> mutex);
 
 
 };
-
-extern std::shared_ptr<CLoggerWorker> cloggerCoreInstance;
-
 
 #endif //LIBCLOGGER_CLOGGERCORE_H

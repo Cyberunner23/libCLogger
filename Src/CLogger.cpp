@@ -28,7 +28,7 @@ CLogger* CLogger::getInstance(){
 }
 
 
-bool CLogger::addSink(std::shared_ptr<CLoggerSinkBase> sink, uint32 channelID){
+void CLogger::addSink(std::shared_ptr<CLoggerSinkBase> sink, uint32 channelID){
     STUB_FUNC(__LINE__, __FILE__)
 }
 
@@ -36,24 +36,8 @@ bool CLogger::removeSink(uint32 channelID){
     STUB_FUNC(__LINE__, __FILE__)
 }
 
-void CLogger::addLogLevel(uint32 logLevelID, std::string logLevelString, bool isFatal){
-    STUB_FUNC(__LINE__, __FILE__)
-}
 
-void CLogger::addLogLevel(uint32 logLevelID, CLoggerLogLevel logLevel){
-    STUB_FUNC(__LINE__, __FILE__)
-}
-
-bool CLogger::removeLogLevel(uint32 logLevelID){
-    STUB_FUNC(__LINE__, __FILE__)
-}
-
-bool CLogger::removeLogLevel(CLoggerLogLevel logLevel){
-    STUB_FUNC(__LINE__, __FILE__)
-}
-
-
-void CLogger::start(){
+void CLogger::init(){
     //cloggerCoreInstance.get()->start();
     STUB_FUNC(__LINE__, __FILE__)
 }
