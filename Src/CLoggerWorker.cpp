@@ -20,84 +20,80 @@ CLoggerWorker::CLoggerWorker()
     :  logQueue(std::make_shared<ConcurrentQueue<CLoggerLogStruct>>()),
        mutex(std::make_shared<std::mutex>()),
        conditionVar(std::make_shared<std::condition_variable>()),
-       isRunning(std::make_shared<std::atomic<bool>>()),
-       isSuspended(std::make_shared<std::atomic<bool>>()),
-       isFlushing(std::make_shared<std::atomic<bool>>()){
+       isRunning(std::make_shared<std::atomic<bool>>(false)),
+       isThreadRunning(std::make_shared<std::atomic<bool>>(false)),
+       isFlushing(std::make_shared<std::atomic<bool>>(false)){
 
 }
 
 CLoggerWorker::~CLoggerWorker(){
-    //Check if OK
-    INCOMPLETE_FUNC(__FILE__, __LINE__)
-    stop();
     flush();
 }
 
 
 void CLoggerWorker::start(){
-    INCOMPLETE_FUNC(__FILE__, __LINE__)
-    isRunning.get()->store(true);
-    isSuspended.get()->store(false);
-    //workerThread = std::thread(run, backend, isSuspended, logQueue, conditionVar, mutex);
+    if(!isRunning.get()->load()){
+        isRunning.get()->store(true);
+        startThread();
+    }
 }
 
 void CLoggerWorker::stop(){
-    INCOMPLETE_FUNC(__FILE__, __LINE__)
-    //Stop receiving messages
-    isRunning.get()->store(false);
-    //Stop the thread
-    pause();
-
+    if(isRunning.get()->load()){
+        isRunning.get()->store(false);
+        stopThread();
+    }
 }
 
-void CLoggerWorker::pause(){
-    INCOMPLETE_FUNC(__FILE__, __LINE__)
-    isSuspended.get()->store(true);
-    conditionVar.get()->notify_one();
-    workerThread.join();
+void CLoggerWorker::startThread(){
+    if(!isThreadRunning.get()->load()){
+        isThreadRunning.get()->store(true);
+        workerThread = std::thread(run, logQueue, sinkMap, isThreadRunning, conditionVar, mutex);
+    }
 }
 
-void CLoggerWorker::resume(){
-    STUB_FUNC(__FILE__, __LINE__)
+void CLoggerWorker::stopThread(){
+    if(isThreadRunning.get()->load()){
+        isThreadRunning.get()->store(false);
+        conditionVar.get()->notify_one();
+        workerThread.join();
+    }
 }
-
 
 
 void CLoggerWorker::flush(){
 
-    //CLoggerLogStruct msg = {};
+    if(!isFlushing.get()->load()){
+        isFlushing.get()->store(true);
 
-    ////Stop consuming.
-    //stop();
+        CLoggerLogStruct msg = {};
+        stop();
 
-    ////Write what's left in the queue;
-    //while(messageQueue.get()->try_dequeue(msg)){
-    //    backend.get()->writeMessage(msg);
-    //    msg = {};
-    //}
+        while(logQueue.get()->try_dequeue(msg)){
+            std::shared_ptr<CLoggerSinkBase> sink = sinkMap.get()->at(msg.channelID);
+            //TODO?: Check if the sink was found.
+            sink.get()->writeMessage(msg);
+            msg = {};
+        }
 
-    //backend.get()->onExit();
-
-    INCOMPLETE_FUNC(__FILE__, __LINE__)
-
+        isFlushing.get()->store(false);
+    }
 }
 
 
-void CLoggerWorker::addSink(std::shared_ptr<CLoggerSinkBase> sink, uint32 sinkID){
-    INCOMPLETE_FUNC(__FILE__, __LINE__)
-    pause();
+void CLoggerWorker::addSink(uint32 sinkID, std::shared_ptr<CLoggerSinkBase> sink){
+    stopThread();
     sinkMap.get()->insert(std::pair<uint32, std::shared_ptr<CLoggerSinkBase>>(sinkID, sink));
-    start();
+    startThread();
 }
 
 bool CLoggerWorker::removeSink(uint32 channelID){
-    INCOMPLETE_FUNC(__FILE__, __LINE__)
-    pause();
+    stopThread();
     if(sinkMap.get()->erase(channelID) == 0){
-        start();
+        startThread();
         return false;
     }else{
-        start();
+        startThread();
         return true;
     }
 }
@@ -115,19 +111,19 @@ bool CLoggerWorker::addMessageToQueue(CLoggerLogStruct message){
 
 void CLoggerWorker::run(std::shared_ptr<ConcurrentQueue<CLoggerLogStruct>> logQueue,
                         std::shared_ptr<std::map<uint32, std::shared_ptr<CLoggerSinkBase>>> sinkMap,
-                        std::shared_ptr<std::atomic<bool>> isSuspended,
+                        std::shared_ptr<std::atomic<bool>> isThreadRunning,
                         std::shared_ptr<std::condition_variable> conditionVar,
                         std::shared_ptr<std::mutex> mutex){
 
-    while(!isSuspended.get()->load()){
+    while(isThreadRunning.get()->load()){
 
-        CLoggerLogStruct msg = {};
+        CLoggerLogStruct             msg = {};
+        bool                         isDequeueSuccess;
         std::unique_lock<std::mutex> lock(*mutex);
 
-        bool isDequeueSuccess;
-        conditionVar.get()->wait(lock, [&logQueue, &msg, &isDequeueSuccess, &isSuspended](){
+        conditionVar.get()->wait(lock, [&logQueue, &msg, &isDequeueSuccess, &isThreadRunning](){
             isDequeueSuccess = logQueue.get()->try_dequeue(msg);
-            return isSuspended.get()->load() || isDequeueSuccess;
+            return !isThreadRunning.get()->load() || isDequeueSuccess;
         });
 
         //If we reach here and that isDequeueSuccess == false
@@ -135,6 +131,7 @@ void CLoggerWorker::run(std::shared_ptr<ConcurrentQueue<CLoggerLogStruct>> logQu
         //If so, don't write an empty message.
         if(isDequeueSuccess){
             std::shared_ptr<CLoggerSinkBase> sink = sinkMap.get()->at(msg.channelID);
+            //TODO?: Check if the sink was found.
             sink.get()->writeMessage(msg);
         }
     }

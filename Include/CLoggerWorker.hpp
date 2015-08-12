@@ -28,8 +28,9 @@ Copyright 2015 Alex Frappier Lachapelle
 #include "CLoggerLog.hpp"
 #include "DevMacros.hpp"
 
-//TODO?: use something else than a shared_ptr for the global instance?
-//TODO?: change start/stop/flush behavior?
+//TODO: Check if the chennalID is valid/registered. / figure
+//          out a way to check if the sink used in the log
+//          message was registered/initialized.
 
 using namespace moodycamel;
 
@@ -45,11 +46,11 @@ public:
 
     void start();
     void stop();
-    void pause();
-    void resume();
+    void startThread();
+    void stopThread();
     void flush();
 
-    void addSink(std::shared_ptr<CLoggerSinkBase> sink, uint32 sinkID);
+    void addSink(uint32 sinkID, std::shared_ptr<CLoggerSinkBase> sink);
     bool removeSink(uint32 channelID);
 
     bool addMessageToQueue(CLoggerLogStruct message);
@@ -67,13 +68,13 @@ private:
     std::shared_ptr<std::mutex>              mutex;
 
     std::shared_ptr<std::atomic<bool>> isRunning;
-    std::shared_ptr<std::atomic<bool>> isSuspended;
+    std::shared_ptr<std::atomic<bool>> isThreadRunning;
     std::shared_ptr<std::atomic<bool>> isFlushing;
 
     //Funcs
     static void run(std::shared_ptr<ConcurrentQueue<CLoggerLogStruct>> logQueue,
                     std::shared_ptr<std::map<uint32, std::shared_ptr<CLoggerSinkBase>>> sinkMap,
-                    std::shared_ptr<std::atomic<bool>> isSuspended,
+                    std::shared_ptr<std::atomic<bool>> isThreadRunning,
                     std::shared_ptr<std::condition_variable> conditionVar,
                     std::shared_ptr<std::mutex> mutex);
 
