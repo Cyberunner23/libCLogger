@@ -28,10 +28,6 @@ Copyright 2015 Alex Frappier Lachapelle
 #include "CLoggerLog.hpp"
 #include "DevMacros.hpp"
 
-//TODO: Check if the chennalID is valid/registered. / figure
-//          out a way to check if the sink used in the log
-//          message was registered/initialized.
-
 using namespace moodycamel;
 
 class CLoggerWorker{
@@ -62,21 +58,23 @@ private:
 
     std::shared_ptr<ConcurrentQueue<CLoggerLogStruct>>                  logQueue;
     std::shared_ptr<std::map<uint32, std::shared_ptr<CLoggerSinkBase>>> sinkMap;
+    std::shared_ptr<std::mutex>                                         sinkMapMutex;
 
     std::thread                              workerThread;
     std::shared_ptr<std::condition_variable> conditionVar;
-    std::shared_ptr<std::mutex>              mutex;
+    std::shared_ptr<std::mutex>              threadMutex;
 
     std::shared_ptr<std::atomic<bool>> isRunning;
     std::shared_ptr<std::atomic<bool>> isThreadRunning;
     std::shared_ptr<std::atomic<bool>> isFlushing;
 
     //Funcs
-    static void run(std::shared_ptr<ConcurrentQueue<CLoggerLogStruct>> logQueue,
+    static void run(std::shared_ptr<ConcurrentQueue<CLoggerLogStruct>>                  logQueue,
                     std::shared_ptr<std::map<uint32, std::shared_ptr<CLoggerSinkBase>>> sinkMap,
-                    std::shared_ptr<std::atomic<bool>> isThreadRunning,
-                    std::shared_ptr<std::condition_variable> conditionVar,
-                    std::shared_ptr<std::mutex> mutex);
+                    std::shared_ptr<std::atomic<bool>>                                  isThreadRunning,
+                    std::shared_ptr<std::condition_variable>                            conditionVar,
+                    std::shared_ptr<std::mutex>                                         threadMutex,
+                    std::shared_ptr<std::mutex>                                         sinkMapMutex);
 
 
 };

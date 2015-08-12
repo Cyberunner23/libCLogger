@@ -18,7 +18,7 @@ Copyright 2015 Alex Frappier Lachapelle
 
 CLoggerWorker::CLoggerWorker()
     :  logQueue(std::make_shared<ConcurrentQueue<CLoggerLogStruct>>()),
-       mutex(std::make_shared<std::mutex>()),
+       threadMutex(std::make_shared<std::mutex>()),
        conditionVar(std::make_shared<std::condition_variable>()),
        isRunning(std::make_shared<std::atomic<bool>>(false)),
        isThreadRunning(std::make_shared<std::atomic<bool>>(false)),
@@ -48,7 +48,7 @@ void CLoggerWorker::stop(){
 void CLoggerWorker::startThread(){
     if(!isThreadRunning.get()->load()){
         isThreadRunning.get()->store(true);
-        workerThread = std::thread(run, logQueue, sinkMap, isThreadRunning, conditionVar, mutex);
+        workerThread = std::thread(run, logQueue, sinkMap, isThreadRunning, conditionVar, threadMutex, sinkMapMutex);
     }
 }
 
@@ -70,10 +70,11 @@ void CLoggerWorker::flush(){
         stop();
 
         while(logQueue.get()->try_dequeue(msg)){
-            std::shared_ptr<CLoggerSinkBase> sink = sinkMap.get()->at(msg.channelID);
-            //TODO?: Check if the sink was found.
-            sink.get()->writeMessage(msg);
-            msg = {};
+            if(sinkMap.get()->count(msg.channelID) > 0){
+                std::lock_guard<std::mutex> sinkMapGuard (*sinkMapMutex);
+                std::shared_ptr<CLoggerSinkBase> sink = sinkMap.get()->at(msg.channelID);
+                sink.get()->writeMessage(msg);
+            }
         }
 
         isFlushing.get()->store(false);
@@ -82,12 +83,18 @@ void CLoggerWorker::flush(){
 
 
 void CLoggerWorker::addSink(uint32 sinkID, std::shared_ptr<CLoggerSinkBase> sink){
+
+    std::lock_guard<std::mutex> sinkMapGuard (*sinkMapMutex);
+
     stopThread();
     sinkMap.get()->insert(std::pair<uint32, std::shared_ptr<CLoggerSinkBase>>(sinkID, sink));
     startThread();
 }
 
 bool CLoggerWorker::removeSink(uint32 channelID){
+
+    std::lock_guard<std::mutex> sinkMapGuard (*sinkMapMutex);
+
     stopThread();
     if(sinkMap.get()->erase(channelID) == 0){
         startThread();
@@ -113,13 +120,14 @@ void CLoggerWorker::run(std::shared_ptr<ConcurrentQueue<CLoggerLogStruct>> logQu
                         std::shared_ptr<std::map<uint32, std::shared_ptr<CLoggerSinkBase>>> sinkMap,
                         std::shared_ptr<std::atomic<bool>> isThreadRunning,
                         std::shared_ptr<std::condition_variable> conditionVar,
-                        std::shared_ptr<std::mutex> mutex){
+                        std::shared_ptr<std::mutex> threadMutex,
+                        std::shared_ptr<std::mutex> sinkMapMutex){
 
     while(isThreadRunning.get()->load()){
 
         CLoggerLogStruct             msg = {};
         bool                         isDequeueSuccess;
-        std::unique_lock<std::mutex> lock(*mutex);
+        std::unique_lock<std::mutex> lock(*threadMutex);
 
         conditionVar.get()->wait(lock, [&logQueue, &msg, &isDequeueSuccess, &isThreadRunning](){
             isDequeueSuccess = logQueue.get()->try_dequeue(msg);
@@ -130,9 +138,11 @@ void CLoggerWorker::run(std::shared_ptr<ConcurrentQueue<CLoggerLogStruct>> logQu
         //Then notify_one was called while the queue was empty
         //If so, don't write an empty message.
         if(isDequeueSuccess){
-            std::shared_ptr<CLoggerSinkBase> sink = sinkMap.get()->at(msg.channelID);
-            //TODO?: Check if the sink was found.
-            sink.get()->writeMessage(msg);
+            if(sinkMap.get()->count(msg.channelID) > 0){
+                std::lock_guard<std::mutex> sinkMapGuard(*sinkMapMutex);
+                std::shared_ptr<CLoggerSinkBase> sink = sinkMap.get()->at(msg.channelID);
+                sink.get()->writeMessage(msg);
+            }
         }
     }
 }

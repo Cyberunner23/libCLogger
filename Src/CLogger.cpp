@@ -18,6 +18,16 @@ Copyright 2015 Alex Frappier Lachapelle
 
 std::unique_ptr<CLogger> CLogger::instance = nullptr;
 
+
+CLogger::CLogger(){
+
+}
+
+CLogger::~CLogger(){
+
+}
+
+
 CLogger* CLogger::getInstance(){
 
     if(instance.get() == nullptr){
@@ -32,7 +42,7 @@ void CLogger::addSink(std::shared_ptr<CLoggerSinkBase> sink, uint32 channelID){
     STUB_FUNC(__LINE__, __FILE__)
 }
 
-bool CLogger::removeSink(uint32 channelID){
+bool CLogger::removeSink(uint32 channelID, bool flush){
     STUB_FUNC(__LINE__, __FILE__)
 }
 

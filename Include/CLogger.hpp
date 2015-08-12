@@ -44,7 +44,7 @@ public:
     //Vars
 
     //Funcs
-
+    ~CLogger();
 
     /*  //ChannelID -> 0 = all channels, 1 = default channel, x = customChannel
      *  CLogger::getInstance().addSink(customSinkClass, sinkID);
@@ -56,9 +56,9 @@ public:
 
     static CLogger* getInstance();
 
-    //TODO: MAKE THESE THREAD SAFE (Gonna have to be locking...)
+    //TODO: MAKE THESE THREAD SAFE (Gonna have to be non-locking...)
     void addSink(std::shared_ptr<CLoggerSinkBase> sink, uint32 sinkID);
-    bool removeSink(uint32 channelID);
+    bool removeSink(uint32 channelID, bool flush = true);
 
 
     //TODO: MAKE THESE THREAD SAFE/ATOMIC
@@ -78,7 +78,7 @@ private:
     CLoggerWorker workerThread;
 
     //Funcs
-    CLogger(){};
+    CLogger();
     CLogger(CLogger const&){};
     CLogger& operator=(CLogger const&){};
 
