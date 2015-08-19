@@ -32,7 +32,7 @@ Copyright 2015 Alex Frappier Lachapelle
 //TODO: Implement cross platform crash handler
 //TODO: Add multiple sink support with channels
 //          to send the log to a certain sink
-//          or a group of sinks
+//          ?? or a group of sinks
 //TODO: Change the Worker according to the other changes made.
 
 using namespace moodycamel;
@@ -46,7 +46,7 @@ public:
     //Funcs
     ~CLogger();
 
-    /*  //ChannelID -> 0 = all channels, 1 = default channel, x = customChannel
+    /*  //?(ChannelID -> 0 = all channels,)? 1 = default channel, x = customChannel
      *  CLogger::getInstance().addSink(customSinkClass, sinkID);
      *  ...
      *  CLogger::getInstance().init(bool initWithDefaultSink = true);
@@ -56,12 +56,12 @@ public:
 
     static CLogger* getInstance();
 
-    //TODO: MAKE THESE THREAD SAFE (Gonna have to be non-locking...)
+    //TODO: MAKE THESE THREAD SAFE (Gonna have to be locking...)
     void addSink(std::shared_ptr<CLoggerSinkBase> sink, uint32 sinkID);
     bool removeSink(uint32 channelID, bool flush = true);
 
 
-    //TODO: MAKE THESE THREAD SAFE/ATOMIC
+    //TODO: MAKE THESE THREAD SAFE
     void init();
     //stops the thread and stops accepting logs.
     void stop(bool flush = true);

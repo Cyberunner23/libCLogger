@@ -41,12 +41,12 @@ public:
     ~CLoggerWorker();
 
     void start();
-    void stop();
-    void startThread();
-    void stopThread();
+    void startThread(bool waitOnFlush = true);
+    void stop(bool        skipOnFlush = true);
+    void stopThread(bool  skipOnFlush = true);
     void flush();
 
-    void addSink(uint32 sinkID, std::shared_ptr<CLoggerSinkBase> sink);
+    bool addSink(uint32 sinkID, std::shared_ptr<CLoggerSinkBase> sink);
     bool removeSink(uint32 channelID);
 
     bool addMessageToQueue(CLoggerLogStruct message);
@@ -56,25 +56,28 @@ private:
 
     //Vars
 
-    std::shared_ptr<ConcurrentQueue<CLoggerLogStruct>>                  logQueue;
-    std::shared_ptr<std::map<uint32, std::shared_ptr<CLoggerSinkBase>>> sinkMap;
-    std::shared_ptr<std::mutex>                                         sinkMapMutex;
+    ConcurrentQueue<CLoggerLogStruct>                  logQueue;
+    std::map<uint32, std::shared_ptr<CLoggerSinkBase>> sinkMap;
+    std::mutex                                         sinkMapMutex;
 
-    std::thread                              workerThread;
-    std::shared_ptr<std::condition_variable> conditionVar;
-    std::shared_ptr<std::mutex>              threadMutex;
+    std::thread             workerThread;
+    std::condition_variable threadCondVar;
+    std::mutex              threadMutex;
 
-    std::shared_ptr<std::atomic<bool>> isRunning;
-    std::shared_ptr<std::atomic<bool>> isThreadRunning;
-    std::shared_ptr<std::atomic<bool>> isFlushing;
+    std::condition_variable startupCondVar;
+    std::mutex              startupMutex;
+
+    std::atomic<bool> isLoggerRunning;
+    std::atomic<bool> isThreadRunning;
+    std::atomic<bool> isFlushing;
 
     //Funcs
-    static void run(std::shared_ptr<ConcurrentQueue<CLoggerLogStruct>>                  logQueue,
-                    std::shared_ptr<std::map<uint32, std::shared_ptr<CLoggerSinkBase>>> sinkMap,
-                    std::shared_ptr<std::atomic<bool>>                                  isThreadRunning,
-                    std::shared_ptr<std::condition_variable>                            conditionVar,
-                    std::shared_ptr<std::mutex>                                         threadMutex,
-                    std::shared_ptr<std::mutex>                                         sinkMapMutex);
+    static void run(ConcurrentQueue<CLoggerLogStruct>                  &logQueue,
+                    std::map<uint32, std::shared_ptr<CLoggerSinkBase>> &sinkMap,
+                    std::atomic<bool>                                  &isThreadRunning,
+                    std::condition_variable                            &threadCondVar,
+                    std::mutex                                         &threadMutex,
+                    std::mutex                                         &sinkMapMutex);
 
 
 };
