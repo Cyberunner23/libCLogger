@@ -20,7 +20,7 @@ std::unique_ptr<CLogger> CLogger::instance = nullptr;
 
 
 CLogger::CLogger(){
-
+    //TODO: initialize crash handler.
 }
 
 CLogger::~CLogger(){
@@ -38,26 +38,29 @@ CLogger* CLogger::getInstance(){
 }
 
 
-void CLogger::addSink(std::shared_ptr<CLoggerSinkBase> sink, uint32 channelID){
-    STUB_FUNC(__LINE__, __FILE__)
+void CLogger::addSink(uint32 sinkID, std::shared_ptr<CLoggerSinkBase> sink){
+    workerThread.addSink(sinkID, sink);
 }
 
 bool CLogger::removeSink(uint32 channelID, bool flush){
-    STUB_FUNC(__LINE__, __FILE__)
+    workerThread.removeSink(channelID);
 }
 
 
-void CLogger::init(){
-    //cloggerCoreInstance.get()->start();
-    STUB_FUNC(__LINE__, __FILE__)
+void CLogger::init(bool waitOnFlush){
+    workerThread.start(waitOnFlush);
 }
 
-void CLogger::stop(bool flush){
-    //if(flush)
-        //cloggerCoreInstance.get()->flush();
-    //else
-        //cloggerCoreInstance.get()->stop();
-    STUB_FUNC(__LINE__, __FILE__)
+void CLogger::resume(bool waitOnFlush){
+    workerThread.startThread(waitOnFlush);
+}
+
+void CLogger::stop(bool skipOnFlush){
+    workerThread.stop(skipOnFlush);
+}
+
+void CLogger::pause(bool skipOnFlush){
+    workerThread.stopThread(skipOnFlush);
 }
 
 

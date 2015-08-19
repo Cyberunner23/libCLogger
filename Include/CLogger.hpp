@@ -33,7 +33,6 @@ Copyright 2015 Alex Frappier Lachapelle
 //TODO: Add multiple sink support with channels
 //          to send the log to a certain sink
 //          ?? or a group of sinks
-//TODO: Change the Worker according to the other changes made.
 
 using namespace moodycamel;
 
@@ -56,18 +55,15 @@ public:
 
     static CLogger* getInstance();
 
-    //TODO: MAKE THESE THREAD SAFE (Gonna have to be locking...)
-    void addSink(std::shared_ptr<CLoggerSinkBase> sink, uint32 sinkID);
+    void addSink(uint32 sinkID, std::shared_ptr<CLoggerSinkBase> sink);
     bool removeSink(uint32 channelID, bool flush = true);
 
-
-    //TODO: MAKE THESE THREAD SAFE
-    void init();
+    void init(bool waitOnFlush = true);
+    void resume(bool waitOnFlush = true);
     //stops the thread and stops accepting logs.
-    void stop(bool flush = true);
+    void stop(bool skipOnFlush = false);
     //stops the thread but the queue keeps filling up.
-    void pause(bool flush = false);
-    void resume();
+    void pause(bool skipOnFlush = false);
 
 
 private:

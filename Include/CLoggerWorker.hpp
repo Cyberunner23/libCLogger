@@ -40,7 +40,7 @@ public:
     CLoggerWorker();
     ~CLoggerWorker();
 
-    void start();
+    void start(bool       waitOnFlush = true);
     void startThread(bool waitOnFlush = true);
     void stop(bool        skipOnFlush = true);
     void stopThread(bool  skipOnFlush = true);

@@ -31,11 +31,11 @@ CLoggerWorker::~CLoggerWorker(){
 }
 
 
-void CLoggerWorker::start(){
+void CLoggerWorker::start(bool waitOnFlush){
     //NOTE: Possible ABA issue here?
     bool expected = false;
     if(isLoggerRunning.compare_exchange_strong(expected, true)){
-        startThread();
+        startThread(waitOnFlush);
     }
 }
 
