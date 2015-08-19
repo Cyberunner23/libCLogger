@@ -18,6 +18,7 @@ Copyright 2015 Alex Frappier Lachapelle
 #define LIBCLOGGER_CLOGGERBACKENDBASE_H
 
 #include <fstream>
+#include <sstream>
 
 #include "CLoggerLog.hpp"
 #include "Typedefs.hpp"

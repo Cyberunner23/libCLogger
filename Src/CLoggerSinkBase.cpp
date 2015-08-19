@@ -74,7 +74,7 @@ void CLoggerSinkBase::onExit(){
 void CLoggerSinkBase::writeMessage(CLoggerLogStruct message){
     outStream << "[" << getTime(time(0))                 << "]";
     outStream << "[" << getTime(message.timeAtLog)       << "]";
-    outStream << "[" << message.threadName               << "]";
+    outStream << "[" << message.threadID                 << "]";
 #ifdef ENABLE_DEBUG_INFO
     outStream << "[" << message.fileName                 << "]";
     outStream << "[" << message.lineNumber               << "]";

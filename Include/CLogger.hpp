@@ -29,11 +29,38 @@ Copyright 2015 Alex Frappier Lachapelle
 
 //TODO!!:  DOCUMENTATION
 
-//TODO: create a stream and printf like front end.
 //TODO: Implement cross platform crash handler
 //TODO: Add multiple sink support with channels
-//          to send the log to a certain sink
-//          ?? or a group of sinks
+//          [DONE] to send the log to a certain sink
+//          [ ?? ] or a group of sinks
+
+#define DEFAULT_CHANNEL 1
+
+//Usage: These functions use a stringstream
+//       LOG_X() << "log message" << some variable << "some more text";
+//       LOGC_X(channelID) << "log message" << some variable << "some more text";
+
+#define LOG_DEBUG()           CLoggerCapture(DEFAULT_CHANNEL, __LINE__, __FILE__, std::time(nullptr), "DEBUG",   false, std::this_thread::get_id()).stream()
+#define LOGC_DEBUG(channel)   CLoggerCapture(channel,         __LINE__, __FILE__, std::time(nullptr), "DEBUG",   false, std::this_thread::get_id()).stream()
+#define LOG_INFO()            CLoggerCapture(DEFAULT_CHANNEL, __LINE__, __FILE__, std::time(nullptr), "INFO",    false, std::this_thread::get_id()).stream()
+#define LOGC_INFO(channel)    CLoggerCapture(channel,         __LINE__, __FILE__, std::time(nullptr), "INFO",    false, std::this_thread::get_id()).stream()
+#define LOG_WARNING()         CLoggerCapture(DEFAULT_CHANNEL, __LINE__, __FILE__, std::time(nullptr), "WARNING", false, std::this_thread::get_id()).stream()
+#define LOGC_WARNING(channel) CLoggerCapture(channel,         __LINE__, __FILE__, std::time(nullptr), "WARNING", false, std::this_thread::get_id()).stream()
+#define LOG_FATAL()           CLoggerCapture(DEFAULT_CHANNEL, __LINE__, __FILE__, std::time(nullptr), "FATAL",   true,  std::this_thread::get_id()).stream()
+#define LOGC_FATAL(channel)   CLoggerCapture(channel,         __LINE__, __FILE__, std::time(nullptr), "FATAL",   true,  std::this_thread::get_id()).stream()
+
+//Usage: These functions are much like printf
+//       LOGF_X("printf like text", variable1, variable2, ...)
+//       LOGFC_X(channelID, "printf like text", variable1, variable2, ...)
+
+#define LOGF_DEBUG(msg, ...)             CLoggerCapture(1,       __LINE__, __FILE__, std::time(nullptr), "DEBUG",   false, std::this_thread::get_id()).capturef(msg, ##__VA_ARGS__)
+#define LOGFC_DEBUG(channel, msg, ...)   CLoggerCapture(channel, __LINE__, __FILE__, std::time(nullptr), "DEBUG",   false, std::this_thread::get_id()).capturef(msg, ##__VA_ARGS__)
+#define LOGF_INFO(msg, ...)              CLoggerCapture(1,       __LINE__, __FILE__, std::time(nullptr), "INFO",    false, std::this_thread::get_id()).capturef(msg, ##__VA_ARGS__)
+#define LOGFC_INFO(channel, msg, ...)    CLoggerCapture(channel, __LINE__, __FILE__, std::time(nullptr), "INFO",    false, std::this_thread::get_id()).capturef(msg, ##__VA_ARGS__)
+#define LOGF_WARNING(msg, ...)           CLoggerCapture(0,       __LINE__, __FILE__, std::time(nullptr), "WARNING", false, std::this_thread::get_id()).capturef(msg, ##__VA_ARGS__)
+#define LOGFC_WARNING(channel, msg, ...) CLoggerCapture(channel, __LINE__, __FILE__, std::time(nullptr), "WARNING", false, std::this_thread::get_id()).capturef(msg, ##__VA_ARGS__)
+#define LOGF_FATAL(msg, ...)             CLoggerCapture(channel, __LINE__, __FILE__, std::time(nullptr), "FATAL",   true,  std::this_thread::get_id()).capturef(msg, ##__VA_ARGS__)
+#define LOGFC_FATAL(channel, msg, ...)   CLoggerCapture(0,       __LINE__, __FILE__, std::time(nullptr), "FATAL",   true,  std::this_thread::get_id()).capturef(msg, ##__VA_ARGS__)
 
 using namespace moodycamel;
 
@@ -56,7 +83,7 @@ public:
 
     static CLogger& getInstance();
 
-    void addSink(uint32 sinkID, std::shared_ptr<CLoggerSinkBase> sink);
+    bool addSink(uint32 sinkID, std::shared_ptr<CLoggerSinkBase> sink);
     bool removeSink(uint32 channelID, bool flush = true);
 
     void init(bool waitOnFlush = true);
@@ -65,6 +92,8 @@ public:
     void stop(bool skipOnFlush = false);
     //stops the thread but the queue keeps filling up.
     void pause(bool skipOnFlush = false);
+
+    void logMsg(CLoggerLogStruct message);
 
 
 private:

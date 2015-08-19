@@ -17,6 +17,8 @@ Copyright 2015 Alex Frappier Lachapelle
 #include "CLogger.hpp"
 
 CLogger::CLogger(){
+
+    addSink(DEFAULT_CHANNEL, std::make_shared<CLoggerSinkBase>());
     //TODO: initialize crash handler.
 }
 
@@ -31,12 +33,12 @@ CLogger& CLogger::getInstance(){
 }
 
 
-void CLogger::addSink(uint32 sinkID, std::shared_ptr<CLoggerSinkBase> sink){
-    workerThread.addSink(sinkID, sink);
+bool CLogger::addSink(uint32 sinkID, std::shared_ptr<CLoggerSinkBase> sink){
+    return workerThread.addSink(sinkID, sink);
 }
 
 bool CLogger::removeSink(uint32 channelID, bool flush){
-    workerThread.removeSink(channelID);
+    return workerThread.removeSink(channelID);
 }
 
 
@@ -54,6 +56,10 @@ void CLogger::stop(bool skipOnFlush){
 
 void CLogger::pause(bool skipOnFlush){
     workerThread.stopThread(skipOnFlush);
+}
+
+void CLogger::logMsg(CLoggerLogStruct message){
+    workerThread.addMessageToQueue(message);
 }
 
 

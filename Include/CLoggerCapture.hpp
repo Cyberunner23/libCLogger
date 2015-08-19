@@ -17,7 +17,12 @@ Copyright 2015 Alex Frappier Lachapelle
 #ifndef LIBCLOGGER_CLOGGERCAPTURE_HPP
 #define LIBCLOGGER_CLOGGERCAPTURE_HPP
 
+#include <sstream>
+#include <stdarg.h>
+
 #include "CLogger.hpp"
+#include "CLoggerLog.hpp"
+#include "Typedefs.hpp"
 
 class CLoggerCapture{
 
@@ -26,13 +31,18 @@ public:
     //Vars
 
     //Funcs
-    CLoggerCapture();
+    CLoggerCapture(uint32 channelID, uint64 lineNumber, std::string fileName, std::time_t timeAtLog, std::string logLevelString, bool isLogFatal, std::thread::id threadID);
     ~CLoggerCapture();
 
+    std::ostringstream& stream();
+    void                capturef(const char* printfLikeMsg, ...);
+    //TODO: printf like interface
 
 private:
 
     //Vars
+    CLoggerLogStruct   log;
+    std::ostringstream osstream;
 
     //Funcs
 
