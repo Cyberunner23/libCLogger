@@ -22,6 +22,7 @@ Copyright 2015 Alex Frappier Lachapelle
 #include "ConcurrentQueue.h"
 
 #include "DevMacros.hpp"
+#include "CLoggerCapture.hpp"
 #include "CLoggerSinkBase.hpp"
 #include "CLoggerWorker.hpp"
 #include "CLoggerLog.hpp"

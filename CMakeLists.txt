@@ -36,12 +36,14 @@ endif()
 #----------------------------------------------------------
 set(CLOGGER_SRC_FILES
     Src/CLogger.cpp
+    Src/CLoggerCapture.cpp
     Src/CLoggerSinkBase.cpp
     Src/CLoggerWorker.cpp
 )
 
 set(CLOGGER_HDR_FILES
     Include/CLogger.hpp
+    Include/CLoggerCapture.hpp
     Include/CLoggerSinkBase.hpp
     Include/CLoggerWorker.hpp
     Include/CLoggerLog.hpp
