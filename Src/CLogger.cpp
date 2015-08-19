@@ -16,9 +16,6 @@ Copyright 2015 Alex Frappier Lachapelle
 
 #include "CLogger.hpp"
 
-std::unique_ptr<CLogger> CLogger::instance = nullptr;
-
-
 CLogger::CLogger(){
     //TODO: initialize crash handler.
 }
@@ -28,13 +25,9 @@ CLogger::~CLogger(){
 }
 
 
-CLogger* CLogger::getInstance(){
-
-    if(instance.get() == nullptr){
-       instance = std::unique_ptr<CLogger>(new CLogger());
-    }
-
-    return instance.get();
+CLogger& CLogger::getInstance(){
+    static CLogger instance;
+    return instance;
 }
 
 

@@ -53,7 +53,7 @@ public:
      * */
 
 
-    static CLogger* getInstance();
+    static CLogger& getInstance();
 
     void addSink(uint32 sinkID, std::shared_ptr<CLoggerSinkBase> sink);
     bool removeSink(uint32 channelID, bool flush = true);
@@ -69,14 +69,13 @@ public:
 private:
 
     //Vars
-    static std::unique_ptr<CLogger> instance;
 
     CLoggerWorker workerThread;
 
     //Funcs
     CLogger();
-    CLogger(CLogger const&){};
-    CLogger& operator=(CLogger const&){};
+    CLogger(CLogger const&)            = delete;
+    CLogger& operator=(CLogger const&) = delete;
 
 
 };
