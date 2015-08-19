@@ -79,7 +79,7 @@ void CLoggerSinkBase::writeMessage(CLoggerLogStruct message){
     outStream << "[" << message.fileName                 << "]";
     outStream << "[" << message.lineNumber               << "]";
 #endif
-    outStream << "["  << message.logLevel.logLevelString << "]";
+    outStream << "["  << message.logLevelString << "]";
     outStream << ": " << message.logMessage              << std::endl;
 }
 

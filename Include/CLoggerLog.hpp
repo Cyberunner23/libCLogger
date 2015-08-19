@@ -21,19 +21,15 @@ Copyright 2015 Alex Frappier Lachapelle
 #include <string>
 #include <Utils/Typedefs.hpp>
 
-struct CLoggerLogLevel{
+struct CLoggerLogStruct{
+    uint32      channelID;
+    std::string logMessage;
+    uint64      lineNumber;
+    std::string fileName;
+    std::time_t timeAtLog;
     std::string logLevelString;
     bool        isLogFatal;
-};
-
-struct CLoggerLogStruct{
-    uint32            channelID;
-    std::string       logMessage;
-    uint64            lineNumber;
-    std::string       fileName;
-    std::time_t       timeAtLog;
-    CLoggerLogLevel   logLevel;
-    std::string       threadName;
+    std::string threadName;
 };
 
 #endif //LIBCLOGGER_CLOGGERMESSAGE_HPP
