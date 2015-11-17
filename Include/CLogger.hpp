@@ -66,8 +66,8 @@ public:
 
         std::string tmpFilePath;
 
-        tmpFilePath =  "Logs/";
-        tmpFilePath += getDate();
+        //tmpFilePath =  "Logs/";
+        tmpFilePath = getDate();
 
         for(int counter = 1; true; counter++){
 

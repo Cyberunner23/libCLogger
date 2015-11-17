@@ -34,7 +34,7 @@ int main(){
 
     CLogger<1> clogger;
 
-    std::unique_ptr<CLoggerSink<DefaultCloggerLogStruct>> sink(new CLoggerSink<DefaultCloggerLogStruct>);
+    std::unique_ptr<CLoggerSink<>> sink(new CLoggerSink<>);
     if(!clogger.addSink(std::move(sink), 0)){return 11;}
     clogger.start();
 
