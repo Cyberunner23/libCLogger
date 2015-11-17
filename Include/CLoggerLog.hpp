@@ -27,7 +27,6 @@ struct CLoggerLogLevel{
 };
 
 struct CLoggerLogStruct{
-    uint32            channelID;
     std::string       logMessage;
     uint64            lineNumber;
     std::string       fileName;

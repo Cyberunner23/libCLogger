@@ -12,71 +12,39 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
-cmake_minimum_required(VERSION 2.8.7)
+cmake_minimum_required(VERSION 3.2)
 project(libCLogger CXX)
-
-
-#----------------------------------------------------------
-####################### OPTIONS ###########################
-#----------------------------------------------------------
-option(LIBCLOGGER_BUILD_SHARED_LIBRARIES "Build libCLogger as a shared Lib (setting this to OFF will compile statically)" ON)
-
 
 #----------------------------------------------------------
 ##################### COMPILER FLAGS ######################
 #----------------------------------------------------------
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+SET(CMAKE_CXX_STANDARD 11)
 
 if(UNIX OR CYGWIN OR MINGW)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lpthread")
 endif()
 
+
 #----------------------------------------------------------
 #################### SOURCE / HEADERS #####################
 #----------------------------------------------------------
 set(CLOGGER_SRC_FILES
-    Src/CLogger.cpp
-    Src/CLoggerSinkBase.cpp
-    Src/CLoggerWorker.cpp
+    Tests/main
 )
 
 set(CLOGGER_HDR_FILES
     Include/CLogger.hpp
-    Include/CLoggerSinkBase.hpp
-    Include/CLoggerWorker.hpp
-    Include/CLoggerLog.hpp
     Include/CLoggerVer.hpp
-    Include/Utils/ConcurrentQueue.h
     Include/Utils/DevMacros.hpp
     Include/Utils/Typedefs.hpp
 
 )
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/Include)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/Include/Utils)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/Libs/MPSCWorker)
 
 
 #----------------------------------------------------------
-######################### LIBRARY #########################
+######################## EXECUTABLE #######################
 #----------------------------------------------------------
-
-IF(LIBCLOGGER_BUILD_SHARED_LIBRARIES)
-    add_library(libCLogger SHARED ${CLOGGER_SRC_FILES} ${CLOGGER_HDR_FILES})
-ELSE(LIBCLOGGER_BUILD_SHARED_LIBRARIES)
-    add_library(libCLogger STATIC ${CLOGGER_SRC_FILES} ${CLOGGER_HDR_FILES})
-ENDIF(LIBCLOGGER_BUILD_SHARED_LIBRARIES)
-
-set_target_properties(libCLogger PROPERTIES
-    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/Lib
-    ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/Lib
-    OUTPUT_NAME "CLogger"
-)
-
-
-
-#TEMPORARY TEST STUFF
-
-#ENABLE_TESTING()
-#ADD_SUBDIRECTORY("${CMAKE_CURRENT_SOURCE_DIR}/Tests")
-
-
-
+add_executable(CLogger ${CLOGGER_SRC_FILES} ${CLOGGER_HDR_FILES})

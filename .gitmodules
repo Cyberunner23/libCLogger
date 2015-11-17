@@ -1,0 +1,3 @@
+[submodule "Libs/MPSCWorker"]
+	path = Libs/MPSCWorker
+	url = https://github.com/Cyberunner23/MPSCWorker.git

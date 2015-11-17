@@ -16,8 +16,8 @@ Copyright 2015 Alex Frappier Lachapelle
 
 #include <stdint.h>
 
-//TODO: Use something better than intx_t as they are
-//          not necessarily portable.
+//TODO?: Use something better than intx_t as they are
+//          not necessarily portable?
 
 typedef uint8_t  	   uint8;
 typedef int8_t         sint8;

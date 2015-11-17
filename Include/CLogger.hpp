@@ -17,72 +17,180 @@ Copyright 2015 Alex Frappier Lachapelle
 #ifndef LIBCLOGGER_CLOGGER_H
 #define LIBCLOGGER_CLOGGER_H
 
+#include <fstream>
+#include <string.h>
 #include <thread>
 
-#include "ConcurrentQueue.h"
-
 #include "DevMacros.hpp"
-#include "CLoggerSinkBase.hpp"
-#include "CLoggerWorker.hpp"
 #include "CLoggerLog.hpp"
+#include "MPSCWorker.hpp"
 
 //TODO!!:  DOCUMENTATION
 
-//TODO: create a stream and printf like front end.
-//TODO: Implement cross platform crash handler
-//TODO: Add multiple sink support with channels
-//          to send the log to a certain sink
-//          or a group of sinks
-//TODO: Change the Worker according to the other changes made.
+//----------------------------------------------------------
+//######################### Macros #########################
+//----------------------------------------------------------
 
-using namespace moodycamel;
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+#define __FILENAME__ (strrchr(__FILE__, '\\') ? strrchr(__FILE__, '\\') + 1 : __FILE__)
+#else
+#define __FILENAME__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
+#endif
 
-class CLogger{
 
+
+//----------------------------------------------------------
+//####################### Data Types #######################
+//----------------------------------------------------------
+
+struct DefaultCloggerLogStruct{
+    std::string     logMessage;
+    uint64          lineNumber;
+    std::string     fileName;
+    std::time_t     timeAtLog;
+    unsigned int    threadID;
+    struct CLoggerLogLevel{
+        std::string logLevelString;
+        bool        isLogFatal;
+    }logLevel;
+};
+
+
+//----------------------------------------------------------
+//##################### Helper Classes #####################
+//----------------------------------------------------------
+
+template <class Type = DefaultCloggerLogStruct>
+class CLoggerSink : public SinkBase<Type>{
 public:
+    virtual bool onInit(){
 
-    //Vars
+        std::string tmpFilePath;
 
-    //Funcs
+        tmpFilePath =  "Logs/";
+        tmpFilePath += getDate();
 
+        for(int counter = 1; true; counter++){
 
-    /*  //ChannelID -> 0 = all channels, 1 = default channel, x = customChannel
-     *  CLogger::getInstance().addSink(customSinkClass, sinkID);
-     *  ...
-     *  CLogger::getInstance().init(bool initWithDefaultSink = true);
-     *
-     * */
+            std::string logFilePathCheck;
 
+            logFilePathCheck =  tmpFilePath;
+            logFilePathCheck += "_";
+            logFilePathCheck += std::to_string(counter);
+            logFilePathCheck += ".log";
 
-    static CLogger* getInstance();
+            bool doesFileExistCheck = doesFileExist(logFilePathCheck);
+            bool isFileEmptyCheck   = isFileEmpty(logFilePathCheck);
 
-    //TODO: MAKE THESE THREAD SAFE (Gonna have to be locking...)
-    void addSink(std::shared_ptr<CLoggerSinkBase> sink, uint32 sinkID);
-    bool removeSink(uint32 channelID);
+            if((doesFileExistCheck && isFileEmptyCheck) || !doesFileExistCheck){
+                logFilePath = logFilePathCheck;
+                break;
+            }
+        }
 
+        outStream.open(logFilePath, std::ios_base::out | std::ios_base::app);
 
-    //TODO: MAKE THESE THREAD SAFE/ATOMIC
-    void init();
-    //stops the thread and stops accepting logs.
-    void stop(bool flush = true);
-    //stops the thread but the queue keeps filling up.
-    void pause(bool flush = false);
-    void resume();
+        if(outStream.is_open()){
 
+            outStream << "CLogger with default sink initialized on " << getDate() << " at " << getTime(time(0)) << std::endl << std::endl;
+            outStream << "[Time Written][Time Logged][Thread ID][File Name][File Line Number][Level]: Message" << std::endl;
 
+            return true;
+        }else{
+            return false;
+        }
+
+    };
+    virtual void onProcess(Type data){
+        outStream << "[" << getTime(time(0))                << "]";
+        outStream << "[" << getTime(data.timeAtLog)         << "]";
+        outStream << "[" << data.threadID                   << "]";
+        outStream << "[" << data.fileName                   << "]";
+        outStream << "[" << data.lineNumber                 << "]";
+        outStream << "["  << data.logLevel.logLevelString   << "]";
+        outStream << ": " << data.logMessage                << std::endl;
+        if(data.logLevel.isLogFatal) std::exit(EXIT_FAILURE);
+    };
 private:
 
     //Vars
-    static std::unique_ptr<CLogger> instance;
-
-    CLoggerWorker workerThread;
+    std::ofstream outStream;
+    std::string   logFilePath;
 
     //Funcs
-    CLogger(){};
-    CLogger(CLogger const&){};
-    CLogger& operator=(CLogger const&){};
+    std::string getDate(){
+
+        time_t      currentTime = time(0);
+        tm          *date       = localtime(&currentTime);
+        std::string dateString  = "";
+
+        dateString =  std::to_string(date->tm_mday);
+        dateString += "-";
+        dateString += std::to_string(date->tm_mon + 1);
+        dateString += "-";
+        dateString += std::to_string(date->tm_year - 100);
+
+        return dateString;
+    }
+
+    std::string getTime(time_t time){
+
+        tm          *date       = localtime(&time);
+        std::string timeString  = "";
+
+        timeString =  std::to_string(date->tm_hour);
+        timeString += ":";
+        timeString += std::to_string(date->tm_min);
+        timeString += ":";
+        timeString += std::to_string(date->tm_sec);
+
+        return timeString;
+    }
+
+    bool doesFileExist(std::string logFile){
+
+        std::ifstream inStream(logFile);
+
+        if(!inStream.is_open()){
+            return false;
+        }
+
+        inStream.close();
+
+        return true;
+    }
+
+    bool isFileEmpty(std::string logFile){
+
+        std::ifstream inStream(logFile);
+        uint64 fileLength;
+
+        inStream.seekg(0, std::ios_base::end);
+        fileLength = (uint64)inStream.tellg();
+
+        if(fileLength != 0){
+            return false;
+        }
+
+        inStream.close();
+
+        return true;
+    }
 
 
 };
+
+
+//----------------------------------------------------------
+//####################### Main Class #######################
+//----------------------------------------------------------
+
+//NOTE: Feel free to modify the LogType but remember to
+//      edit your sinks as necessary!
+template<const unsigned int NumOfSinks, class LogType = DefaultCloggerLogStruct>
+using CLogger = MPSCWorker<LogType, NumOfSinks>;
+
+template<const unsigned int NumOfSinks, class LogType = DefaultCloggerLogStruct>
+using CLoggerSingleton = MPSCWorkerSingleton<LogType, NumOfSinks>;
 
 #endif //LIBCLOGGER_CLOGGER_H

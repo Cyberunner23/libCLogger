@@ -14,16 +14,38 @@ Copyright 2015 Alex Frappier Lachapelle
    limitations under the License.
 */
 
-#include <iostream>
 #include "CLogger.hpp"
+
+static void run(CLogger<1> &clogger){
+    for(int i = 0;  i != 5; i++){
+        CLogger<1>::type msg;
+        msg.logMessage              =  "Thread " + std::to_string(Utils::getThreadID())+ ": Test message #" + std::to_string(i) + ";";
+        msg.lineNumber              = __LINE__;
+        msg.fileName                = __FILENAME__;
+        msg.timeAtLog               = std::time(0);
+        msg.threadID                = Utils::getThreadID();
+        msg.logLevel.logLevelString = "INFO";
+        msg.logLevel.isLogFatal     = false;
+        clogger.send(msg, 0);
+    }
+}
 
 int main(){
 
-    std::unique_ptr<int> test;
+    CLogger<1> clogger;
 
-    if(test.get() == nullptr)
-        std::cout << "NULL" << std::endl;
+    std::unique_ptr<CLoggerSink<DefaultCloggerLogStruct>> sink(new CLoggerSink<DefaultCloggerLogStruct>);
+    if(!clogger.addSink(std::move(sink), 0)){return 11;}
+    clogger.start();
 
+    std::thread threads[4];
+    for(int i = 0; i < 4; i++){
+        threads[i] = std::thread(run, std::ref(clogger));
+    }
+
+    for(int i = 0; i < 4; i++){
+        threads[i].join();
+    }
 
     return 0;
 }
