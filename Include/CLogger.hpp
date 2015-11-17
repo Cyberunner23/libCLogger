@@ -22,8 +22,8 @@ Copyright 2015 Alex Frappier Lachapelle
 #include <thread>
 
 #include "DevMacros.hpp"
-#include "CLoggerLog.hpp"
 #include "MPSCWorker.hpp"
+#include "Typedefs.hpp"
 
 //TODO!!:  DOCUMENTATION
 
@@ -36,7 +36,6 @@ Copyright 2015 Alex Frappier Lachapelle
 #else
 #define __FILENAME__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
 #endif
-
 
 
 //----------------------------------------------------------

@@ -29,7 +29,7 @@ endif()
 #################### SOURCE / HEADERS #####################
 #----------------------------------------------------------
 set(CLOGGER_SRC_FILES
-    Tests/main
+    Tests/main.cpp
 )
 
 set(CLOGGER_HDR_FILES
