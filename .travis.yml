@@ -12,7 +12,7 @@ addons:
   apt: &gcc5
      packages:
        - gcc-5
-       - llvm-3.7-dev
+       - clang-3.7
      sources:
        - ubuntu-toolchain-r-test
        - llvm-toolchain-precise-3.7
