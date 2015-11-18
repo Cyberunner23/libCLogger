@@ -28,8 +28,8 @@ install:
 before_script:
   - if [ "$CXX" == "clang++" ]; then
         export CXXCOMPILER="clang"
-        && export CC="clang"
-        && clang --version
+        && export CC="clang-3.7"
+        && clang-3.7 --version
         && find / | grep clang;
     fi
   - if [ "$CXX" == "g++" ]; then
