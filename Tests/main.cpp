@@ -16,31 +16,22 @@ Copyright 2015 Alex Frappier Lachapelle
 
 #include "CLogger.hpp"
 
-static void run(CLogger<1> &clogger){
+static void run(int val){
     for(int i = 0;  i != 5; i++){
-        CLogger<1>::type msg;
-        msg.logMessage              =  "Thread " + std::to_string(Utils::getThreadID())+ ": Test message #" + std::to_string(i) + ";";
-        msg.lineNumber              = __LINE__;
-        msg.fileName                = __FILENAME__;
-        msg.timeAtLog               = std::time(0);
-        msg.threadID                = Utils::getThreadID();
-        msg.logLevel.logLevelString = "INFO";
-        msg.logLevel.isLogFatal     = false;
-        clogger.send(msg, 0);
+        CLoggerCapture<1>(0, __LINE__, __FILENAME__, std::time(0), "BLAHG", false).stream() << "Thread " + std::to_string(Utils::getThreadID())+ ": Test message #" + std::to_string(i) + ";";
     }
 }
 
 int main(){
 
-    CLogger<1> clogger;
 
     std::unique_ptr<CLoggerSink<>> sink(new CLoggerSink<>);
-    if(!clogger.addSink(std::move(sink), 0)){return 11;}
-    clogger.start();
+    if(!CLoggerSingleton<1>::getInstance()->addSink(std::move(sink), 0)){return 11;}
+    CLoggerSingleton<1>::getInstance()->start();
 
     std::thread threads[4];
     for(int i = 0; i < 4; i++){
-        threads[i] = std::thread(run, std::ref(clogger));
+        threads[i] = std::thread(run, 0);
     }
 
     for(int i = 0; i < 4; i++){

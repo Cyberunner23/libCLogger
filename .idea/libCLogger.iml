@@ -3,19 +3,16 @@
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/CMakeLists.txt" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Include/CLogger.hpp" isTestSource="false" />
-
-      <sourceFolder url="file://$MODULE_DIR$/Include/CLoggerVer.hpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Include/Utils/DevMacros.hpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Include/Utils/Typedefs.hpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/CLogger.hpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/CLoggerVer.hpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Utils/DevMacros.hpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Utils/Typedefs.hpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Tests/main.cpp" isTestSource="false" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module-library">
       <library name="Header Search Paths">
         <CLASSES>
-          <root url="file://$MODULE_DIR$/Include" />
-          <root url="file://$MODULE_DIR$/Libs/MPSCWorker" />
           <root url="file:///usr/include" />
           <root url="file:///usr/lib/gcc/x86_64-unknown-linux-gnu/5.2.0/include" />
           <root url="file:///usr/lib/gcc/x86_64-unknown-linux-gnu/5.2.0/include-fixed" />
@@ -24,8 +21,6 @@
           <root url="file:///usr/local/include" />
         </CLASSES>
         <SOURCES>
-          <root url="file://$MODULE_DIR$/Include" />
-          <root url="file://$MODULE_DIR$/Libs/MPSCWorker" />
           <root url="file:///usr/include" />
           <root url="file:///usr/lib/gcc/x86_64-unknown-linux-gnu/5.2.0/include" />
           <root url="file:///usr/lib/gcc/x86_64-unknown-linux-gnu/5.2.0/include-fixed" />
@@ -33,12 +28,6 @@
           <root url="file:///usr/lib/gcc/x86_64-unknown-linux-gnu/5.2.0/include/sanitizer" />
           <root url="file:///usr/local/include" />
         </SOURCES>
-        <excluded>
-          <root url="file://$MODULE_DIR$/Include/Utils/DevMacros.hpp" />
-          <root url="file://$MODULE_DIR$/Include/CLoggerVer.hpp" />
-          <root url="file://$MODULE_DIR$/Include/Utils/Typedefs.hpp" />
-          <root url="file://$MODULE_DIR$/Include/CLogger.hpp" />
-        </excluded>
       </library>
     </orderEntry>
   </component>

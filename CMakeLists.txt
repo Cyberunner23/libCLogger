@@ -33,14 +33,14 @@ set(CLOGGER_SRC_FILES
 )
 
 set(CLOGGER_HDR_FILES
-    Include/CLogger.hpp
-    Include/CLoggerVer.hpp
-    Include/Utils/DevMacros.hpp
-    Include/Utils/Typedefs.hpp
+    CLogger.hpp
+    CLoggerVer.hpp
+    Utils/DevMacros.hpp
+    Utils/Typedefs.hpp
 
 )
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/Include)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/Include/Utils)
+include_directories(.)
+include_directories(Utils)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/Libs/MPSCWorker)
 
 

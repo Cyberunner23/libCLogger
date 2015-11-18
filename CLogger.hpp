@@ -18,6 +18,7 @@ Copyright 2015 Alex Frappier Lachapelle
 #define LIBCLOGGER_CLOGGER_H
 
 #include <fstream>
+#include <sstream>
 #include <string.h>
 #include <thread>
 
@@ -42,7 +43,9 @@ Copyright 2015 Alex Frappier Lachapelle
 //####################### Data Types #######################
 //----------------------------------------------------------
 
-struct DefaultCloggerLogStruct{
+//NOTE: Feel free to modify the CLoggerLogStruct but
+// remember to edit your sinks as necessary!
+struct CLoggerLogStruct{
     std::string     logMessage;
     uint64          lineNumber;
     std::string     fileName;
@@ -56,10 +59,85 @@ struct DefaultCloggerLogStruct{
 
 
 //----------------------------------------------------------
+//####################### Main Class #######################
+//----------------------------------------------------------
+
+template<const unsigned int NumOfSinks, class LogType = CLoggerLogStruct>
+using CLoggerSingleton = MPSCWorkerSingleton<LogType, NumOfSinks>;
+
+
+
+//----------------------------------------------------------
 //##################### Helper Classes #####################
 //----------------------------------------------------------
 
-template <class Type = DefaultCloggerLogStruct>
+//This class assumes DefaultCLoggerLogStruct is used.
+//example CLoggerSingleton<>
+template<const unsigned int NumOfSinks, class LogType = CLoggerLogStruct>
+class CLoggerCapture{
+
+public:
+
+    //Funcs
+    CLoggerCapture(uint32 sinkID, uint64 lineNumber, std::string fileName, std::time_t timeAtLog, std::string logLevelString, bool isLogFatal){
+        this->sinkID                = sinkID;
+        log.lineNumber              = lineNumber;
+        log.fileName                = fileName;
+        log.timeAtLog               = timeAtLog;
+        log.threadID                = Utils::getThreadID();
+        log.logLevel.logLevelString = logLevelString;
+        log.logLevel.isLogFatal     = isLogFatal;
+    }
+
+    ~CLoggerCapture(){
+        log.logMessage = osstream.str();
+        CLoggerSingleton<NumOfSinks, LogType>::getInstance()->send(log, sinkID);
+    }
+
+    std::ostringstream& stream(){return osstream;}
+
+/*
+    void CLoggerCapture::capturef(const char *printfLikeMsg, ...){
+
+    static const int         maxMsgSize = 4096;
+    static const std::string truncMsg   = " [truncated]";
+    char                     finalizedMsg[maxMsgSize];
+    va_list                  arglist;
+
+    va_start(arglist, printfLikeMsg);
+
+#if (defined(WIN32) || defined(_WIN32) || defined(__WIN32__) && !defined(__GNUC__))
+    const int numChar = vsnprintf_s(finished_message, _countof(finished_message), _TRUNCATE, printf_like_message, arglist);
+#else
+    const int numChar = vsnprintf(finalizedMsg, sizeof (finalizedMsg), printfLikeMsg, arglist);
+#endif
+
+    va_end(arglist);
+
+    if(numChar <= 0){
+        stream() << "\n\tLOGGER ERROR: Failed to successfully parse the message:";
+        stream() << "\"" << printfLikeMsg << "\"";
+    }else if(numChar > maxMsgSize){
+        stream() << finalizedMsg << truncMsg;
+    }else{
+        stream() << finalizedMsg;
+    }
+}
+
+*/
+
+
+private:
+
+    //Vars
+    LogType            log;
+    unsigned int       sinkID;
+    std::ostringstream osstream;
+
+};
+
+
+template <class Type = CLoggerLogStruct>
 class CLoggerSink : public SinkBase<Type>{
 public:
     virtual bool onInit(){
@@ -178,18 +256,5 @@ private:
 
 
 };
-
-
-//----------------------------------------------------------
-//####################### Main Class #######################
-//----------------------------------------------------------
-
-//NOTE: Feel free to modify the LogType but remember to
-//      edit your sinks as necessary!
-template<const unsigned int NumOfSinks, class LogType = DefaultCloggerLogStruct>
-using CLogger = MPSCWorker<LogType, NumOfSinks>;
-
-template<const unsigned int NumOfSinks, class LogType = DefaultCloggerLogStruct>
-using CLoggerSingleton = MPSCWorkerSingleton<LogType, NumOfSinks>;
 
 #endif //LIBCLOGGER_CLOGGER_H
