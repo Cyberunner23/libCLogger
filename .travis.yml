@@ -40,7 +40,7 @@ before_script:
         && export CC="gcc-5"
         && export CXX="g++-5"
         && gcc-5 --version
-        && g++-5 --version
+        && g++-5 --version;
     fi
   - git submodule update --init --recursive
   - mkdir build
