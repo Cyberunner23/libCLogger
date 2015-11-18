@@ -11,8 +11,8 @@ compiler:
 addons:
   apt: &gcc5
      packages:
-       - gcc-4.8
-       - g++-4.8
+       - gcc-5
+       - g++-5
        - clang-3.7
      sources:
        - ubuntu-toolchain-r-test
@@ -37,10 +37,10 @@ before_script:
     fi
   - if [ "$CXX" == "g++" ]; then
         export CXXCOMPILER="gcc"
-        && export CC="gcc-4.8"
-        && export CXX="g++-4.8"
-        && gcc-4.8 --version
-        && find / | grep gcc-4.8;
+        && export CC="gcc-5"
+        && export CXX="g++-5"
+        && gcc-5 --version
+        && g++-5 --version
     fi
   - git submodule update --init --recursive
   - mkdir build
