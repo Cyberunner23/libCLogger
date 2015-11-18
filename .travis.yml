@@ -43,6 +43,7 @@ before_script:
         && g++-5 --version;
     fi
   - git submodule update --init --recursive
+  - cat Libs/MPSCWorker/MPSCWorker.hpp
   - mkdir build
   - cd build
   - ../cmake-3.4.0-Linux-x86_64/bin/cmake ..
