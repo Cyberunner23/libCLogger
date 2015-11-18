@@ -11,7 +11,7 @@ compiler:
 addons:
   apt: &gcc5
      packages:
-       - gcc-5
+       - gcc-4.8
        - clang-3.7
        - libstdc++
      sources:
@@ -37,7 +37,8 @@ before_script:
     fi
   - if [ "$CXX" == "g++" ]; then
         export CXXCOMPILER="gcc"
-        && export CC="gcc-5"
+        && export CC="gcc-4.8"
+        && export CXX="g++-4.8"
         && gcc-5 --version;
     fi
   - git submodule update --init --recursive
