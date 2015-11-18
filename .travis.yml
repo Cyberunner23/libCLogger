@@ -40,7 +40,7 @@ before_script:
         && export CC="gcc-4.8"
         && export CXX="g++-4.8"
         && gcc-4.8 --version
-        && find / | grep g++-4.8;
+        && find / | grep gcc-4.8;
     fi
   - git submodule update --init --recursive
   - mkdir build
