@@ -29,7 +29,8 @@ before_script:
   - if [ "$CXX" == "g++" ]; then
         export CXXCOMPILER="gcc"
         export CXX="g++-5"
-        export CC="gcc-5";
+        export CC="gcc-5"
+        gcc --version;
     fi
   - git submodule update --init --recursive
   - mkdir build
