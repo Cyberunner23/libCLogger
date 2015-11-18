@@ -30,7 +30,7 @@ before_script:
         export CXXCOMPILER="gcc"
         export CXX="g++-5"
         export CC="gcc-5"
-        gcc-5 --version;
+        find / | gcc;
     fi
   - git submodule update --init --recursive
   - mkdir build
