@@ -29,7 +29,8 @@ before_script:
   - if [ "$CXX" == "clang++" ]; then
         export CXXCOMPILER="clang"
         && export CC="clang"
-        && clang --version;
+        && clang --version
+        && find / | grep clang;
     fi
   - if [ "$CXX" == "g++" ]; then
         export CXXCOMPILER="gcc"
