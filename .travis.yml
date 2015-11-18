@@ -13,6 +13,7 @@ addons:
      packages:
        - gcc-5
        - clang-3.7
+       - libstdc++
      sources:
        - ubuntu-toolchain-r-test
        - llvm-toolchain-precise-3.7
