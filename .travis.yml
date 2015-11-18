@@ -12,6 +12,8 @@ addons:
   apt:
      packages:
        - gcc-5
+     sources:
+       - ubuntu-toolchain-r-test
 
 install:
   - if [ ! "$(ls -A cmake-3.4.0-Linux-x86_64)" ]; then
