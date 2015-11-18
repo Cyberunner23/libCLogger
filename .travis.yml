@@ -26,7 +26,11 @@ install:
 
 before_script:
   - if [ "$CXX" == "clang++" ]; then export CXXCOMPILER="clang"; fi
-  - if [ "$CXX" == "g++" ];     then export CXXCOMPILER="gcc"; fi
+  - if [ "$CXX" == "g++" ]; then
+        export CXXCOMPILER="gcc"
+        export CXX="g++-5"
+        export CC="gcc-5";
+    fi
   - git submodule update --init --recursive
   - mkdir build
   - cd build
