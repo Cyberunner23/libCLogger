@@ -14,7 +14,7 @@ Copyright 2015 Alex Frappier Lachapelle
    limitations under the License.
 */
 
-#ifndef LIBCLOGGER_CLOGGER_H
+/*#ifndef LIBCLOGGER_CLOGGER_H
 #define LIBCLOGGER_CLOGGER_H
 
 #include <fstream>
@@ -122,12 +122,12 @@ public:
     }else{
         stream() << finalizedMsg;
     }
-}
-
-*/
+}*/
 
 
-private:
+
+
+/*private:
 
     //Vars
     LogType            log;
@@ -257,4 +257,4 @@ private:
 
 };
 
-#endif //LIBCLOGGER_CLOGGER_H
+#endif //LIBCLOGGER_CLOGGER_H*/

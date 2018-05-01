@@ -1,50 +1,25 @@
-#Copyright 2015 Alex Frappier Lachapelle
-#
-#   Licensed under the Apache License, Version 2.0 (the "License");
-#   you may not use this file except in compliance with the License.
-#   You may obtain a copy of the License at
-#
-#       http://www.apache.org/licenses/LICENSE-2.0
-#
-#   Unless required by applicable law or agreed to in writing, software
-#   distributed under the License is distributed on an "AS IS" BASIS,
-#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#   See the License for the specific language governing permissions and
-#   limitations under the License.
+cmake_minimum_required(VERSION 3.0)
 
-cmake_minimum_required(VERSION 3.3)
-project(libCLogger CXX)
+#------------------------------------------------------------------------------
+# Project
+#------------------------------------------------------------------------------
 
-#----------------------------------------------------------
-##################### COMPILER FLAGS ######################
-#----------------------------------------------------------
-#SET(CMAKE_CXX_STANDARD 11)
-
-if(UNIX OR CYGWIN OR MINGW)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lpthread -std=c++11")
-endif()
+project(libCLogger VERSION 0.3.0)
 
 
-#----------------------------------------------------------
-#################### SOURCE / HEADERS #####################
-#----------------------------------------------------------
-set(CLOGGER_SRC_FILES
-    Tests/main.cpp
+#------------------------------------------------------------------------------
+# Config
+#------------------------------------------------------------------------------
+
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED true)
+
+
+#------------------------------------------------------------------------------
+# Library
+#------------------------------------------------------------------------------
+
+add_library(${PROJECT_NAME} INTERFACE)
+target_include_directories(${PROJECT_NAME} INTERFACE
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 )
-
-set(CLOGGER_HDR_FILES
-    CLogger.hpp
-    CLoggerVer.hpp
-    Utils/DevMacros.hpp
-    Utils/Typedefs.hpp
-
-)
-include_directories(.)
-include_directories(Utils)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/Libs/MPSCWorker)
-
-
-#----------------------------------------------------------
-######################## EXECUTABLE #######################
-#----------------------------------------------------------
-add_executable(CLogger ${CLOGGER_SRC_FILES} ${CLOGGER_HDR_FILES})
