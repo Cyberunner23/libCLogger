@@ -22,27 +22,12 @@ int main(int argc, char** argv)
 
     auto thing = std::static_pointer_cast<Sink>(stdOut);
 
-    {
-        CLogger::getInstance()->addSink(thing);
-    }
+    CLogger::getInstance()->addSink(thing);
     CLogger::getInstance()->start();
 
-    LogMessage msg; 
-    msg.level = INFO; 
-    msg.sinkID = 0; 
-    msg.fileName = __FILE__; 
-    msg.lineNumber = __LINE__; 
-    msg.logTime = time(nullptr); 
-    LogCapture(std::move(msg)).stream() << "hey1";
+    LOG(INFO) << "hey1";
 
-    LogMessage msg2;
-    msg2.level = INFO;
-    msg2.sinkID = 0;
-    msg2.fileName = __FILE__;
-    msg2.lineNumber = __LINE__;
-    msg2.logTime = time(nullptr);
-    LogCapture(std::move(msg2)).stream() << "hey";
-    
+    LOG(WARNING) << "hey2";
 
     return 0;
 }

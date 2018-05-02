@@ -42,7 +42,7 @@ public:
 
     unsigned long addSink(std::shared_ptr<Sink>& sink)
     {
-        assert_msg(!_isRunning.load(), "Sinks must be added before starting the worker.");
+        assert_msg(!_isRunning.load(), "Sinks must be added before starting the logger.");
         _sinks.push_back(sink);
         return _sinks.size() - 1;
     }
@@ -55,13 +55,11 @@ public:
     }
 
 
-
-
     void log(LogMessage&& message)
     {
         static thread_local moodycamel::ProducerToken token(_logQueue);
 
-        assert_msg(message.sinkID > getSinkCount(), "You must use a valid sink id when sending a log.");
+        assert_msg(message.sinkID < getSinkCount(), "You must use a valid sink id when sending a log.");
 
         if (_isRunning.load())
         {

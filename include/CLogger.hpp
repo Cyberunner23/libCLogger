@@ -26,14 +26,7 @@ Copyright 2018 Alex Frappier Lachapelle
 // Defines
 //------------------------------------------------------------------------------
 
-#define LOG_SINK(sinkid, lvl) \
-    LogMessage msg; \
-    msg.level = lvl; \
-    msg.sinkID = sinkid; \
-    msg.fileName = __FILE__; \
-    msg.lineNumber = __LINE__; \
-    msg.logTime = time(nullptr); \
-    LogCapture(std::move(msg)).stream()
+#define LOG_SINK(sinkid, lvl) LogCapture(sinkid, lvl, __LINE__, __FILE__, time(nullptr)).stream()
 
 #define LOG(level) LOG_SINK(0, level)
 

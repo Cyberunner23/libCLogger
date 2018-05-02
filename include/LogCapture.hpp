@@ -27,7 +27,19 @@ class LogCapture
 
 public:
 
-    explicit LogCapture(LogMessage&& message) noexcept : _message(std::move(message)) {}
+    LogCapture(unsigned int sinkID,
+               LogLevel level,
+               unsigned int lineNumber,
+               std::string fileName,
+               std::time_t logTime) noexcept
+    {
+        _message.level = level;
+        _message.sinkID = sinkID;
+        _message.lineNumber = lineNumber;
+        _message.fileName = std::move(fileName);
+        _message.logTime = logTime;
+    }
+
     ~LogCapture() noexcept(false)
     {
         _stream << std::endl;
