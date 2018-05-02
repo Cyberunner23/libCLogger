@@ -1,5 +1,5 @@
 /*
-Copyright 2015 Alex Frappier Lachapelle
+Copyright 2018 Alex Frappier Lachapelle
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -14,58 +14,38 @@ Copyright 2015 Alex Frappier Lachapelle
    limitations under the License.
 */
 
-/*#ifndef LIBCLOGGER_CLOGGER_H
-#define LIBCLOGGER_CLOGGER_H
+#pragma once
 
-#include <fstream>
-#include <sstream>
-#include <string.h>
-#include <thread>
-
-#include "DevMacros.hpp"
-#include "MPSCWorker.hpp"
-#include "Typedefs.hpp"
-
-//TODO!!:  DOCUMENTATION
-
-//----------------------------------------------------------
-//######################### Macros #########################
-//----------------------------------------------------------
-
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
-#define __FILENAME__ (strrchr(__FILE__, '\\') ? strrchr(__FILE__, '\\') + 1 : __FILE__)
-#else
-#define __FILENAME__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
-#endif
+#include "CLoggerImpl.hpp"
+#include "LogCapture.hpp"
+#include "LogMessage.hpp"
+#include "Singleton.hpp"
 
 
-//----------------------------------------------------------
-//####################### Data Types #######################
-//----------------------------------------------------------
+//------------------------------------------------------------------------------
+// Defines
+//------------------------------------------------------------------------------
 
-//NOTE: Feel free to modify the CLoggerLogStruct but
-// remember to edit your sinks as necessary!
-struct CLoggerLogStruct{
-    std::string     logMessage;
-    uint64          lineNumber;
-    std::string     fileName;
-    std::time_t     timeAtLog;
-    unsigned int    threadID;
-    struct CLoggerLogLevel{
-        std::string logLevelString;
-        bool        isLogFatal;
-    }logLevel;
-};
+#define LOG_SINK(sinkid, lvl) \
+    LogMessage msg; \
+    msg.level = lvl; \
+    msg.sinkID = sinkid; \
+    msg.fileName = __FILE__; \
+    msg.lineNumber = __LINE__; \
+    msg.logTime = time(nullptr); \
+    LogCapture(std::move(msg)).stream()
+
+#define LOG(level) LOG_SINK(0, level)
 
 
-//----------------------------------------------------------
-//####################### Main Class #######################
-//----------------------------------------------------------
-
-template<const unsigned int NumOfSinks, class LogType = CLoggerLogStruct>
-using CLoggerSingleton = MPSCWorkerSingleton<LogType, NumOfSinks>;
 
 
+
+
+
+
+
+/*
 
 //----------------------------------------------------------
 //##################### Helper Classes #####################
@@ -95,37 +75,6 @@ public:
     }
 
     std::ostringstream& stream(){return osstream;}
-
-/*
-    void CLoggerCapture::capturef(const char *printfLikeMsg, ...){
-
-    static const int         maxMsgSize = 4096;
-    static const std::string truncMsg   = " [truncated]";
-    char                     finalizedMsg[maxMsgSize];
-    va_list                  arglist;
-
-    va_start(arglist, printfLikeMsg);
-
-#if (defined(WIN32) || defined(_WIN32) || defined(__WIN32__) && !defined(__GNUC__))
-    const int numChar = vsnprintf_s(finished_message, _countof(finished_message), _TRUNCATE, printf_like_message, arglist);
-#else
-    const int numChar = vsnprintf(finalizedMsg, sizeof (finalizedMsg), printfLikeMsg, arglist);
-#endif
-
-    va_end(arglist);
-
-    if(numChar <= 0){
-        stream() << "\n\tLOGGER ERROR: Failed to successfully parse the message:";
-        stream() << "\"" << printfLikeMsg << "\"";
-    }else if(numChar > maxMsgSize){
-        stream() << finalizedMsg << truncMsg;
-    }else{
-        stream() << finalizedMsg;
-    }
-}*/
-
-
-
 
 /*private:
 
