@@ -17,12 +17,10 @@ int main(int argc, char** argv)
 {
 
     //Add sinks
-
     std::shared_ptr<StdOut> stdOut = std::make_shared<StdOut>();
+    auto stdOutSink = std::static_pointer_cast<Sink>(stdOut);
 
-    auto thing = std::static_pointer_cast<Sink>(stdOut);
-
-    CLogger::getInstance()->addSink(thing);
+    CLogger::getInstance()->addSink(stdOutSink);
     CLogger::getInstance()->start();
 
     LOG(INFO) << "hey1";

@@ -21,6 +21,8 @@ Copyright 2018 Alex Frappier Lachapelle
 
 #include "LogLevel.hpp"
 
+
+//SinkID = -1 : Used internally
 struct LogMessage
 {
     std::string  message;

@@ -85,7 +85,7 @@ private:
     void stop()
     {
         LogMessage flushEndMsg;
-        flushEndMsg.sinkID = (unsigned int)-1; //Intentional underflow
+        flushEndMsg.sinkID = -1;
 
         _isRunning.store(false);
         _logQueue.enqueue(flushEndMsg);
@@ -104,7 +104,7 @@ private:
 
         LogMessage message{};
 
-        while (true)
+        for (;;)
         {
 
             _logQueue.wait_dequeue(token, message);
