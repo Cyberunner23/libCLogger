@@ -1,26 +1,15 @@
 
+#include "../include/sinks/File.hpp"
 #include "../include/CLogger.hpp"
-#include "../include/Assert.hpp"
-#include "../include/Sink.hpp"
-
-
-class StdOut : public Sink
-{
-    void append(LogMessage& message) final
-    {
-        std::cout << message.message;
-    }
-};
 
 
 int main(int argc, char** argv)
 {
 
     //Add sinks
-    std::shared_ptr<StdOut> stdOut = std::make_shared<StdOut>();
-    auto stdOutSink = std::static_pointer_cast<Sink>(stdOut);
+    auto fileSink = std::static_pointer_cast<Sink>(std::make_shared<File>("Test.txt"));
 
-    CLogger::getInstance()->addSink(stdOutSink);
+    CLogger::getInstance()->addSink(fileSink);
     CLogger::getInstance()->start();
 
     LOG(INFO) << "hey1";

@@ -51,6 +51,8 @@ set(TEST_SRC
     include/Sink.hpp
     include/3rdParty/blockingconcurrentqueue.h
     include/3rdParty/concurrentqueue.h
+    include/sinks/File.hpp
+    include/sinks/StdOut.hpp
 )
 add_executable(Test ${TEST_SRC})
 target_link_libraries(Test ${CMAKE_THREAD_LIBS_INIT})

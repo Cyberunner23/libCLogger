@@ -16,6 +16,8 @@ Copyright 2018 Alex Frappier Lachapelle
 
 #pragma once
 
+#include <string>
+
  ///This enum represents the various log levels that the logger can use.
  ///This can be edited to suit users needs.
 
@@ -39,4 +41,25 @@ Copyright 2018 Alex Frappier Lachapelle
  static bool isLevelFatal(LogLevel level)
  {
      return level == FATAL;
+ }
+
+ static std::string logLevelAsString(LogLevel& lvl)
+ {
+     switch (lvl)
+     {
+         case TRACE:
+             return "TRACE";
+         case DEBUG:
+             return "DEBUG";
+         case INFO:
+             return "INFO";
+         case WARNING:
+             return "WARNING";
+         case ERROR:
+             return "ERROR";
+         case FATAL:
+             return "FATAL";
+     }
+
+     return "INVALID";
  }
